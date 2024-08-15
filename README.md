@@ -16,6 +16,14 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
+You will need a Loops API key to use the package.
+
+In your Loops account, go to the [API Settings page](https://app.loops.so/settings?page=api) and click "Generate key".
+
+Copy this key and save it in your application code (for example as `LOOPS_API_KEY` in an `.env` file).
+
+See the API documentation to learn more about [rate limiting](https://loops.so/docs/api-reference#rate-limiting) and [error handling](https://loops.so/docs/api-reference#debugging).
+
 In an initializer, import and configure the SDK:
 
 ```ruby
@@ -24,7 +32,7 @@ In an initializer, import and configure the SDK:
 require "loops_sdk"
 
 LoopsSdk.configure do |config|
-  config.api_key = '3d264d10f6688b19150bbb46c9223e23'
+  config.api_key = 'your_api_key'
 end
 ```
 
