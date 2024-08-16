@@ -4,7 +4,7 @@ module LoopsSdk
   class CustomFields < Base
     class << self
       def list
-        make_request(:get, "v1/customFields")
+        make_request(:get, "v1/contacts/customFields")
       end
     end
   end
