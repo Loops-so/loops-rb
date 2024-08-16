@@ -75,6 +75,7 @@ You can use custom contact properties in API calls. Please make sure to [add cus
 
 ## Methods
 
+- [ApiKey.test()](#apikey-test)
 - [Contacts.create()](#contacts-create)
 - [Contacts.update()](#contacts-update)
 - [Contacts.find()](#contacts-find)
@@ -83,6 +84,41 @@ You can use custom contact properties in API calls. Please make sure to [add cus
 - [Events.send()](#events-send)
 - [Transactional.send()](#transactional-send)
 - [CustomFields.list()](#customfields-list)
+
+---
+
+### ApiKey.test()
+
+Test if your API key is valid.
+
+[API Reference](https://loops.so/docs/api-reference/api-key)
+
+#### Parameters
+
+None
+
+#### Example
+
+```ruby
+response LoopsSdk::ApiKey.test
+```
+
+#### Response
+
+This method will return a success or error message:
+
+```json
+{
+  "success": true,
+  "teamName": "Company name"
+}
+```
+
+```json
+{
+  "error": "Invalid API key"
+}
+```
 
 ---
 
@@ -299,7 +335,7 @@ None
 #### Example
 
 ```ruby
-response = LoopsSdk::MailingLists.list()
+response = LoopsSdk::MailingLists.list
 ```
 
 #### Response
@@ -489,7 +525,7 @@ None
 #### Example
 
 ```ruby
-response LoopsSdk::CustomFields.list()
+response LoopsSdk::CustomFields.list
 ```
 
 #### Response
