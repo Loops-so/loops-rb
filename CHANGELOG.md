@@ -1,3 +1,7 @@
+## v0.1.2 - Aug 16, 2024
+
+Support for resetting contact properties with `nil`.
+
 ## v0.1.1 - Aug 16, 2024
 
 Added `ApiKey.test` method for testing API keys.
