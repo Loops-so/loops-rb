@@ -7,7 +7,7 @@ module LoopsSdk
         contact_data = {
           email: email,
           mailingLists: mailing_lists
-        }.merge(properties.compact).compact
+        }.merge(properties)
         make_request(:post, "v1/contacts/create", {}, contact_data)
       end
 
@@ -15,7 +15,8 @@ module LoopsSdk
         contact_data = {
           email: email,
           mailingLists: mailing_lists
-        }.merge(properties.compact).compact
+        }.merge(properties)
+        puts "Contact Data: #{contact_data.inspect}"
         make_request(:put, "v1/contacts/update", {}, contact_data)
       end
 

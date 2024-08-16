@@ -12,7 +12,7 @@ module LoopsSdk
           eventName: event_name,
           eventProperties: event_properties.compact,
           mailingLists: mailing_lists.compact
-        }.merge(contact_properties.compact).compact
+        }.merge(contact_properties)
         make_request(:post, "v1/events/send", {}, event_data)
       end
     end
