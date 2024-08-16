@@ -340,7 +340,7 @@ response = LoopsSdk::MailingLists.list
 
 #### Response
 
-This method will return a list of mailing list objects containing `id` and `name` attributes.
+This method will return a list of mailing list objects containing `id`, `name` and `isPublic` attributes.
 
 If your account has no mailing lists, an empty list will be returned.
 
@@ -348,11 +348,13 @@ If your account has no mailing lists, an empty list will be returned.
 [
   {
     "id": "list_123",
-    "name": "Main list"
+    "name": "Main list",
+    "isPublic": true
   },
   {
     "id": "list_456",
-    "name": "Investors"
+    "name": "Investors",
+    "isPublic": false
   }
 ]
 ```
