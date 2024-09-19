@@ -252,7 +252,7 @@ You must use one parameter in the request.
 ```ruby
 response = LoopsSdk::Contacts.find(email: "hello@gmail.com")
 
-response = LoopsSdk::Contacts.find(userId: "12345")
+response = LoopsSdk::Contacts.find(user_id: "12345")
 ```
 
 #### Response
@@ -284,7 +284,7 @@ If no contact is found, an empty list will be returned.
 
 ### Contacts.delete()
 
-Delete a contact, either by email address or `userId`.
+Delete a contact.
 
 [API Reference](https://loops.so/docs/api-reference/delete-contact)
 
@@ -302,7 +302,7 @@ You must use one parameter in the request.
 ```ruby
 response = LoopsSdk::Contacts.delete(email: "hello@gmail.com")
 
-response = LoopsSdk::Contacts.delete(userId: "12345")
+response = LoopsSdk::Contacts.delete(user_id: "12345")
 ```
 
 #### Response
