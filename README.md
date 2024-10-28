@@ -558,4 +558,4 @@ If your account has no custom fields, an empty list will be returned.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/Loops-so/loops-rb.
+Bug reports and pull requests are welcome. Please read our [Contributing Guidelines](CONTRIBUTING.md).
