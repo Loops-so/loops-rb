@@ -16,7 +16,6 @@ module LoopsSdk
           email: email,
           mailingLists: mailing_lists
         }.merge(properties)
-        puts "Contact Data: #{contact_data.inspect}"
         make_request(:put, "v1/contacts/update", {}, contact_data)
       end
 
