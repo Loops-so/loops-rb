@@ -9,6 +9,10 @@ module LoopsSdk
         case response.status
         when 200
           JSON.parse(response.body)
+        when 429
+          limit = response.headers["x-ratelimit-limit"]
+          remaining = response.headers["x-ratelimit-remaining"]
+          raise RateLimitError.new(limit, remaining)
         when 400, 404, 405, 409, 500
           raise APIError.new(response.status, response.body)
         else
@@ -25,8 +29,16 @@ module LoopsSdk
     end
   end
 
-  # The `APIError` class in Ruby represents an error that occurs during an API request with specific
-  # status and response body information.
+  class RateLimitError < StandardError
+    attr_reader :limit, :remaining
+
+    def initialize(limit, remaining)
+      @limit = limit
+      @remaining = remaining
+      super("Rate limit of #{limit} requests per second exceeded.")
+    end
+  end
+
   class APIError < StandardError
     attr_reader :status, :body
 

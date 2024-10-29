@@ -56,6 +56,29 @@ rescue LoopsSdk::APIError => e
 end
 ```
 
+## Handling rate limits
+
+You can use the check for rate limit issues with your requests.
+
+You can access details about the rate limits from the `limit` and `remaining` attributes.
+
+```ruby
+begin
+
+  response = LoopsSdk::Contacts.update(
+    email: "dan@loops.so"
+  )
+
+  render json: response
+
+rescue LoopsSdk::RateLimitError => e
+  Rails.logger.error("Rate limit exceeded (#{e.limit} requests per second)")
+  # Code here to re-try this request
+rescue LoopsSdk::APIError => e
+  # Handle other errors
+end
+```
+
 ## Default contact properties
 
 Each contact in Loops has a set of default properties. These will always be returned in API results.
