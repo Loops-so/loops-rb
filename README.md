@@ -98,15 +98,15 @@ You can use custom contact properties in API calls. Please make sure to [add cus
 
 ## Methods
 
-- [ApiKey.test()](#apikey-test)
-- [Contacts.create()](#contacts-create)
-- [Contacts.update()](#contacts-update)
-- [Contacts.find()](#contacts-find)
-- [Contacts.delete()](#contacts-delete)
-- [MailingLists.list()](#mailinglists-list)
-- [Events.send()](#events-send)
-- [Transactional.send()](#transactional-send)
-- [CustomFields.list()](#customfields-list)
+- [ApiKey.test()](#apikeytest)
+- [Contacts.create()](#contactscreate)
+- [Contacts.update()](#contactsupdate)
+- [Contacts.find()](#contactsfind)
+- [Contacts.delete()](#contactsdelete)
+- [MailingLists.list()](#mailinglistslist)
+- [Events.send()](#eventssend)
+- [Transactional.send()](#transactionalsend)
+- [CustomFields.list()](#customfieldslist)
 
 ---
 
