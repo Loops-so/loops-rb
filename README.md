@@ -145,7 +145,7 @@ This method will return a success or error message:
 
 ---
 
-## Contacts.create()
+### Contacts.create()
 
 Create a new contact.
 
@@ -199,7 +199,7 @@ This method will return a success or error message:
 
 ---
 
-## Contacts.update()
+### Contacts.update()
 
 Update a contact.
 
@@ -366,7 +366,7 @@ response = LoopsSdk::MailingLists.list
 
 #### Response
 
-This method will return a list of mailing list objects containing `id`, `name` and `isPublic` attributes.
+This method will return a list of mailing list objects containing `id`, `name`, `description` and `isPublic` attributes.
 
 If your account has no mailing lists, an empty list will be returned.
 
@@ -375,11 +375,13 @@ If your account has no mailing lists, an empty list will be returned.
   {
     "id": "cm06f5v0e45nf0ml5754o9cix",
     "name": "Main list",
+    "description": "All customers."
     "isPublic": true
   },
   {
     "id": "cm16k73gq014h0mmj5b6jdi9r",
     "name": "Investors",
+    "description": null,
     "isPublic": false
   }
 ]
