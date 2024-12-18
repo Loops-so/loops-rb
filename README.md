@@ -375,7 +375,7 @@ If your account has no mailing lists, an empty list will be returned.
   {
     "id": "cm06f5v0e45nf0ml5754o9cix",
     "name": "Main list",
-    "description": "All customers."
+    "description": "All customers.",
     "isPublic": true
   },
   {
