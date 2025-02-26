@@ -1,3 +1,9 @@
+## v1.0.0 - Feb 26, 2025
+
+- JSON from API errors is now accessible from the `APIError` class.
+- Added support for two new contact property endpoints: `ContactProperties.create()` and `ContactProperties.list()`.
+- Deprecated and removed the `CustomFields.list()` method (you can now use `ContactProperties.list()` instead).
+
 ## v0.2.0 - Oct 29, 2024
 
 Added rate limit handling with `RateLimitError`.

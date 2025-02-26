@@ -9,7 +9,7 @@ require_relative "loops_sdk/contacts"
 require_relative "loops_sdk/events"
 require_relative "loops_sdk/mailing_lists"
 require_relative "loops_sdk/transactional"
-require_relative "loops_sdk/custom_fields"
+require_relative "loops_sdk/contact_properties"
 require_relative "loops_sdk/api_key"
 
 module LoopsSdk

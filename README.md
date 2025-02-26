@@ -38,9 +38,10 @@ LoopsSdk.configure do |config|
 end
 ```
 
+Then you can call methods in your code:
+
 ```ruby
 begin
-
   response = LoopsSdk::Transactional.send(
     transactional_id: "closfz8ui02yq......",
     email: "dan@loops.so",
@@ -48,11 +49,12 @@ begin
       loginUrl: "https://app.domain.com/login?code=1234567890"
     }
   )
-
   render json: response
 
 rescue LoopsSdk::APIError => e
-  # Do something if there is an error from the API
+  # JSON returned by the API is in error.json and the HTTP code is in error.statusCode
+  # Error messages explaining the issue can be found in error.json['message']
+  Rails.logger.error("Loops API Error: #{e.json['message']} (Status: #{e.statusCode})")
 end
 ```
 
@@ -103,10 +105,11 @@ You can use custom contact properties in API calls. Please make sure to [add cus
 - [Contacts.update()](#contactsupdate)
 - [Contacts.find()](#contactsfind)
 - [Contacts.delete()](#contactsdelete)
+- [ContactProperties.create()](#contactpropertiescreate)
+- [ContactProperties.list()](#contactpropertieslist)
 - [MailingLists.list()](#mailinglistslist)
 - [Events.send()](#eventssend)
 - [Transactional.send()](#transactionalsend)
-- [CustomFields.list()](#customfieldslist)
 
 ---
 
@@ -348,6 +351,133 @@ This method will return a success or error message:
 
 ---
 
+### ContactProperties.create()
+
+Create a new contact property.
+
+[API Reference](https://loops.so/docs/api-reference/create-contact-property)
+
+#### Parameters
+
+| Name   | Type   | Required | Notes                                                                                  |
+| ------ | ------ | -------- | -------------------------------------------------------------------------------------- |
+| `name` | string | Yes      | The name of the property. Should be in camelCase, like `planName` or `favouriteColor`. |
+| `type` | string | Yes      | The property's value type.<br />Can be one of `string`, `number`, `boolean` or `date`. |
+
+#### Examples
+
+```ruby
+response = LoopsSdk::ContactProperties.create(
+  name: "planName",
+  type: "string"
+)
+```
+
+#### Response
+
+This method will return a success or error message:
+
+```json
+{
+  "success": true
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "An error message here."
+}
+```
+
+---
+
+### ContactProperties.list()
+
+Get a list of your account's contact properties.
+
+[API Reference](https://loops.so/docs/api-reference/list-contact-properties)
+
+#### Parameters
+
+| Name   | Type   | Required | Notes                                                           |
+| ------ | ------ | -------- | --------------------------------------------------------------- |
+| `list` | string | No       | Use "custom" to retrieve only your account's custom properties. |
+
+#### Example
+
+```ruby
+response = LoopsSdk::ContactProperties.list
+
+response = LoopsSdk::ContactProperties.list(list: "custom")
+```
+
+#### Response
+
+This method will return a list of contact property objects containing `key`, `label` and `type` attributes.
+
+```json
+[
+  {
+    "key": "firstName",
+    "label": "First Name",
+    "type": "string"
+  },
+  {
+    "key": "lastName",
+    "label": "Last Name",
+    "type": "string"
+  },
+  {
+    "key": "email",
+    "label": "Email",
+    "type": "string"
+  },
+  {
+    "key": "notes",
+    "label": "Notes",
+    "type": "string"
+  },
+  {
+    "key": "source",
+    "label": "Source",
+    "type": "string"
+  },
+  {
+    "key": "userGroup",
+    "label": "User Group",
+    "type": "string"
+  },
+  {
+    "key": "userId",
+    "label": "User Id",
+    "type": "string"
+  },
+  {
+    "key": "subscribed",
+    "label": "Subscribed",
+    "type": "boolean"
+  },
+  {
+    "key": "createdAt",
+    "label": "Created At",
+    "type": "date"
+  },
+  {
+    "key": "favoriteColor",
+    "label": "Favorite Color",
+    "type": "string"
+  },
+  {
+    "key": "plan",
+    "label": "Plan",
+    "type": "string"
+  }
+]
+```
+
+---
+
 ### MailingLists.list()
 
 Get a list of your account's mailing lists. [Read more about mailing lists](https://loops.so/docs/contacts/mailing-lists)
@@ -506,7 +636,7 @@ response = LoopsSdk::Transactional.send(
       data: "JVBERi0xLjMKJcTl8uXrp/Og0MTGCjQgMCBvYmoKPD...",
     },
   ],
-})
+)
 ```
 
 #### Response
@@ -538,45 +668,6 @@ If there is a problem with the request, a descriptive error message will be retu
   },
   "transactionalId": "clfq6dinn000yl70fgwwyp82l"
 }
-```
-
----
-
-### CustomFields.list()
-
-Get a list of your account's custom fields. These are custom properties that can be added to contacts to store extra data. [Read more about contact properties](https://loops.so/docs/contacts/properties)
-
-[API Reference](https://loops.so/docs/api-reference/list-custom-fields)
-
-#### Parameters
-
-None
-
-#### Example
-
-```ruby
-response LoopsSdk::CustomFields.list
-```
-
-#### Response
-
-This method will return a list of custom field objects containing `key`, `label` and `type` attributes.
-
-If your account has no custom fields, an empty list will be returned.
-
-```json
-[
-  {
-    "key": "favoriteColor",
-    "label": "Favorite Color",
-    "type": "string"
-  },
-  {
-    "key": "plan",
-    "label": "Plan",
-    "type": "string"
-  }
-]
 ```
 
 ---

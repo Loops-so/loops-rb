@@ -40,12 +40,18 @@ module LoopsSdk
   end
 
   class APIError < StandardError
-    attr_reader :status, :body
+    attr_reader :statusCode, :json
 
     def initialize(status, body)
-      @status = status
-      @body = body
-      super("API request failed with status #{status}: #{body}")
+      @statusCode = status
+      @json = body
+      message = begin
+                  parsed = JSON.parse(body)
+                  parsed["message"] ? ": #{parsed["message"]}" : ""
+                rescue JSON::ParserError
+                  ""
+                end
+      super("API request failed with status #{statusCode}#{message}")
     end
   end
 end
