@@ -110,6 +110,7 @@ You can use custom contact properties in API calls. Please make sure to [add cus
 - [MailingLists.list()](#mailinglistslist)
 - [Events.send()](#eventssend)
 - [Transactional.send()](#transactionalsend)
+- [Transactional.list()](#transactionallist)
 
 ---
 
@@ -235,7 +236,8 @@ response = LoopsSdk::Contacts.update(
   email: "newemail@gmail.com",
   properties: {
     userId: "1234",
-  })
+  }
+)
 ```
 
 #### Response
@@ -555,7 +557,7 @@ response = LoopsSdk::Events.send(
     cm06f5v0e45nf0ml5754o9cix: true,
     cm16k73gq014h0mmj5b6jdi9r: false,
   },
-})
+)
 
 # In this case with both email and userId present, the system will look for a contact with either a
 #  matching `email` or `user_id` value.
@@ -570,7 +572,7 @@ response = LoopsSdk::Events.send(
     firstName: "Bob",
     plan: "pro",
   },
-})
+)
 ```
 
 #### Response
@@ -667,6 +669,68 @@ If there is a problem with the request, a descriptive error message will be retu
     "message": "Missing required fields: login_url"
   },
   "transactionalId": "clfq6dinn000yl70fgwwyp82l"
+}
+```
+
+---
+
+### Transactional.list()
+
+Get a list of published transactional emails.
+
+[API Reference](https://loops.so/docs/api-reference/list-transactional-emails)
+
+#### Parameters
+
+| Name      | Type    | Required | Notes                                                                                                                         |
+| --------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `perPage` | integer | No       | How many results to return per page. Must be between 10 and 50. Defaults to 20 if omitted.                                    |
+| `cursor`  | string  | No       | A cursor, to return a specific page of results. Cursors can be found from the `pagination.nextCursor` value in each response. |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Transactional.list
+
+response = LoopsSdk::Transactional.list(perPage: 15)
+```
+
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 23,
+    "returnedResults": 20,
+    "perPage": 20,
+    "totalPages": 2,
+    "nextCursor": "clyo0q4wo01p59fsecyxqsh38",
+    "nextPage": "https://app.loops.so/api/v1/transactional?cursor=clyo0q4wo01p59fsecyxqsh38&perPage=20"
+  },
+  "data": [
+    {
+      "id": "clfn0k1yg001imo0fdeqg30i8",
+      "lastUpdated": "2023-11-06T17:48:07.249Z",
+      "dataVariables": []
+    },
+    {
+      "id": "cll42l54f20i1la0lfooe3z12",
+      "lastUpdated": "2025-02-02T02:56:28.845Z",
+      "dataVariables": [
+        "confirmationUrl"
+      ]
+    },
+    {
+      "id": "clw6rbuwp01rmeiyndm80155l",
+      "lastUpdated": "2024-05-14T19:02:52.000Z",
+      "dataVariables": [
+        "firstName",
+        "lastName",
+        "inviteLink"
+      ]
+    },
+    ...
+  ]
 }
 ```
 

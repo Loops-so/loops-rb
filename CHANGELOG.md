@@ -1,3 +1,7 @@
+## v1.1.0 - Feb 27, 2025
+
+Added support for new List transactionals endpoint with `Transactional.list()`.
+
 ## v1.0.0 - Feb 26, 2025
 
 - JSON from API errors is now accessible from the `APIError` class.

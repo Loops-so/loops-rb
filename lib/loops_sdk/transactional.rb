@@ -3,6 +3,9 @@
 module LoopsSdk
   class Transactional < Base
     class << self
+      def list(perPage: 20, cursor: nil)
+        make_request(:get, "v1/transactional", { perPage: perPage, cursor: cursor })
+      end
       def send(transactional_id:, email:, add_to_audience: false, data_variables: {}, attachments: [])
         attachments = attachments.map do |attachment|
           attachment.transform_keys { |key| key == :content_type ? :contentType : key }
