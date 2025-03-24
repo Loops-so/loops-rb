@@ -1,5 +1,7 @@
 # Loops Ruby SDK
 
+[![Gem Total Downloads](https://img.shields.io/gem/dt/loops_sdk?style=social)](https://rubygems.org/gems/loops_sdk)
+
 ## Introduction
 
 This is the official Ruby SDK for [Loops](https://loops.so), an email platform for modern software companies.
