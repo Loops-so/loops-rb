@@ -4,7 +4,7 @@ module LoopsSdk
   class Transactional < Base
     class << self
       def list(perPage: 20, cursor: nil)
-        make_request(:get, "v1/transactional", params: { perPage: perPage, cursor: cursor })
+        make_request(method: :get, path: "v1/transactional", params: { perPage: perPage, cursor: cursor })
       end
       def send(transactional_id:, email:, add_to_audience: false, data_variables: {}, attachments: [], headers: {})
         attachments = attachments.map do |attachment|
@@ -17,7 +17,7 @@ module LoopsSdk
           dataVariables: data_variables,
           attachments: attachments
         }.compact
-        make_request(:post, "v1/transactional", headers: headers, body: email_data)
+        make_request(method: :post, path: "v1/transactional", headers: headers, body: email_data)
       end
     end
   end
