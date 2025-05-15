@@ -738,6 +738,12 @@ response = LoopsSdk::Transactional.list(perPage: 15)
 
 ---
 
+## Testing
+
+Run tests with `bundle exec rspec`.
+
+---
+
 ## Contributing
 
 Bug reports and pull requests are welcome. Please read our [Contributing Guidelines](CONTRIBUTING.md).

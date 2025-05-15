@@ -21,11 +21,18 @@ module LoopsSdk
       end
 
       def make_request(method:, path:, headers: {}, params: {}, body: nil)
-        response = LoopsSdk.configuration.connection.send(method, path, params) do |req|
+        # Merge default headers with request-specific headers
+        merged_headers = LoopsSdk.configuration.connection.headers.merge(headers)
+        
+        response = LoopsSdk.configuration.connection.send(
+          method: method,
+          path: path,
+          headers: merged_headers,
+          params: params,
+          body: body
+        ) do |req|
           req.body = body.to_json if body
-          headers.each do |key, value|
-            req.headers[key] = value if value.is_a?(String) && !value.empty?
-          end
+          req
         end
         handle_response(response)
       end
