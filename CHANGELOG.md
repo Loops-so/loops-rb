@@ -1,3 +1,8 @@
+## v1.2.0 - May 15, 2025
+
+- Added a `headers` parameter for `Events.send()` and `Transactional.send()`, enabling support for the `Idempotency-Key` header.
+- Added test suite and a tests for `Events` and `Transactional` classes.
+
 ## v1.1.0 - Feb 27, 2025
 
 Added support for new List transactionals endpoint with `Transactional.list()`.
