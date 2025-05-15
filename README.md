@@ -539,6 +539,7 @@ Send an event to trigger an email in Loops. [Read more about events](https://loo
 | `contact_properties` | object | No       | An object containing contact properties, which will be updated or added to the contact when the event is received.<br />Please [add custom properties](https://loops.so/docs/contacts/properties#custom-contact-properties) in your Loops account before using them with the SDK.<br />Values can be of type `string`, `number`, `nil` (to reset a value), `boolean` or `date` ([see allowed date formats](https://loops.so/docs/contacts/properties#dates)). |
 | `event_properties`   | object | No       | An object containing event properties, which will be made available in emails that are triggered by this event.<br />Values can be of type `string`, `number`, `boolean` or `date` ([see allowed date formats](https://loops.so/docs/events/properties#important-information-about-event-properties)).                                                                                                                                                        |
 | `mailing_lists`      | object | No       | An object of mailing list IDs and boolean subscription statuses.                                                                                                                                                                                                                                                                                                                                                                                              |
+| `headers`            | object | No       | Additional headers to send with the request.                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 #### Examples
 
@@ -575,6 +576,15 @@ response = LoopsSdk::Events.send(
     plan: "pro",
   },
 )
+
+# Example with Idempotency-Key header
+response = LoopsSdk::Events.send(
+  event_name: "signup",
+  email: "hello@gmail.com",
+  headers: {
+    "Idempotency-Key" => "550e8400-e29b-41d4-a716-446655440000"
+  },
+)
 ```
 
 #### Response
@@ -608,12 +618,13 @@ Send a transactional email to a contact. [Learn about sending transactional emai
 | ---------------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `transactional_id`           | string   | Yes      | The ID of the transactional email to send.                                                                                                                                                       |
 | `email`                      | string   | Yes      | The email address of the recipient.                                                                                                                                                              |
-| `add_to_audience`            | boolean  | No       | If `true`, a contact will be created in your audience using the `email` value (if a matching contact doesn’t already exist).                                                                     |
+| `add_to_audience`            | boolean  | No       | If `true`, a contact will be created in your audience using the `email` value (if a matching contact doesn't already exist).                                                                     |
 | `data_variables`             | object   | No       | An object containing data as defined by the data variables added to the transactional email template.<br />Values can be of type `string` or `number`.                                           |
 | `attachments`                | object[] | No       | A list of attachments objects.<br />**Please note**: Attachments need to be enabled on your account before using them with the API. [Read more](https://loops.so/docs/transactional/attachments) |
 | `attachments[].filename`     | string   | No       | The name of the file, shown in email clients.                                                                                                                                                    |
 | `attachments[].content_type` | string   | No       | The MIME type of the file.                                                                                                                                                                       |
 | `attachments[].data`         | string   | No       | The base64-encoded content of the file.                                                                                                                                                          |
+| `headers`                    | object   | No       | Additional headers to send with the request.                                                                                                                                                     |
 
 #### Examples
 
@@ -623,6 +634,18 @@ response = LoopsSdk::Transactional.send(
   email: "hello@gmail.com",
   data_variables: {
     loginUrl: "https://myapp.com/login/",
+  },
+)
+
+# Example with Idempotency-Key header
+response = LoopsSdk::Transactional.send(
+  transactional_id: "clfq6dinn000yl70fgwwyp82l",
+  email: "hello@gmail.com",
+  data_variables: {
+    loginUrl: "https://myapp.com/login/",
+  },
+  headers: {
+    "Idempotency-Key" => "550e8400-e29b-41d4-a716-446655440000"
   },
 )
 
