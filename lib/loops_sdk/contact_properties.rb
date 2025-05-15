@@ -8,11 +8,11 @@ module LoopsSdk
           name: name,
           type: type
         }
-        make_request(:post, "v1/contacts/properties", {}, body)
+        make_request(:post, "v1/contacts/properties", body: body)
       end
       def list(list: nil)
         raise ArgumentError, "List value must be nil, 'custom' or 'all'." unless [nil, "custom", "all"].include?(list)
-        make_request(:get, "v1/contacts/properties", {list: list || "all"})
+        make_request(:get, "v1/contacts/properties", params: { list: list || "all" })
       end
     end
   end

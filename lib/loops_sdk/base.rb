@@ -20,9 +20,12 @@ module LoopsSdk
         end
       end
 
-      def make_request(method, path, params = {}, body = nil)
+      def make_request(method, path, headers = {}, params = {}, body = nil)
         response = LoopsSdk.configuration.connection.send(method, path, params) do |req|
           req.body = body.to_json if body
+          headers.each do |key, value|
+            req.headers[key] = value if value.is_a?(String) && !value.empty?
+          end
         end
         handle_response(response)
       end
