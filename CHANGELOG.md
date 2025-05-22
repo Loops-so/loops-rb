@@ -1,3 +1,7 @@
+## v1.2.1 - May 22, 2025
+
+Fixed issue with `GET` API requests.
+
 ## v1.2.0 - May 15, 2025
 
 - Added a `headers` parameter for `Events.send()` and `Transactional.send()`, enabling support for the `Idempotency-Key` header.
