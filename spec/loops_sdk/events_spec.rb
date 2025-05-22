@@ -34,22 +34,21 @@ RSpec.describe LoopsSdk::Events do
         mailingLists: mailing_lists
       }.merge(contact_properties)
 
-      expect(connection).to receive(:send).with(
-        method: :post,
-        path: "v1/events/send",
-        headers: default_headers,
-        params: {},
-        body: expected_body
-      ) do |**_kwargs, &block|
+      expect(connection).to receive(:send).with(:post) do |&block|
         req = double("req")
+        expect(req).to receive(:url).with("v1/events/send")
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
         expect(req).to receive(:body=) do |body|
           expect(JSON.parse(body)).to eq(JSON.parse(expected_body.to_json))
         end
         block.call(req)
         response
       end
+
       allow(response).to receive(:status).and_return(200)
       allow(response).to receive(:body).and_return('{"success":true}')
+
       result = described_class.send(
         event_name: event_name,
         email: email,
@@ -70,27 +69,21 @@ RSpec.describe LoopsSdk::Events do
         mailingLists: {}
       }
 
-      expect(connection).to receive(:send).with(
-        method: :post,
-        path: "v1/events/send",
-        headers: default_headers,
-        params: {},
-        body: expected_body
-      ) do |**_kwargs, &block|
+      expect(connection).to receive(:send).with(:post) do |&block|
         req = double("req")
+        expect(req).to receive(:url).with("v1/events/send")
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
         expect(req).to receive(:body=) do |body|
-          parsed_body = JSON.parse(body)
-          expect(parsed_body["eventName"]).to eq(event_name)
-          expect(parsed_body["email"]).to eq(email)
-          expect(parsed_body["userId"]).to be_nil
-          expect(parsed_body["eventProperties"]).to eq({})
-          expect(parsed_body["mailingLists"]).to eq({})
+          expect(JSON.parse(body)).to eq(JSON.parse(expected_body.to_json))
         end
         block.call(req)
         response
       end
+
       allow(response).to receive(:status).and_return(200)
       allow(response).to receive(:body).and_return('{"success":true}')
+
       described_class.send(event_name: event_name, email: email)
     end
 
@@ -103,27 +96,21 @@ RSpec.describe LoopsSdk::Events do
         mailingLists: {}
       }
 
-      expect(connection).to receive(:send).with(
-        method: :post,
-        path: "v1/events/send",
-        headers: default_headers,
-        params: {},
-        body: expected_body
-      ) do |**_kwargs, &block|
+      expect(connection).to receive(:send).with(:post) do |&block|
         req = double("req")
+        expect(req).to receive(:url).with("v1/events/send")
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
         expect(req).to receive(:body=) do |body|
-          parsed_body = JSON.parse(body)
-          expect(parsed_body["eventName"]).to eq(event_name)
-          expect(parsed_body["email"]).to be_nil
-          expect(parsed_body["userId"]).to eq(user_id)
-          expect(parsed_body["eventProperties"]).to eq({})
-          expect(parsed_body["mailingLists"]).to eq({})
+          expect(JSON.parse(body)).to eq(JSON.parse(expected_body.to_json))
         end
         block.call(req)
         response
       end
+
       allow(response).to receive(:status).and_return(200)
       allow(response).to receive(:body).and_return('{"success":true}')
+
       described_class.send(event_name: event_name, user_id: user_id)
     end
 
@@ -132,14 +119,11 @@ RSpec.describe LoopsSdk::Events do
       custom_headers = { "Idempotency-Key" => idempotency_key }
       expected_headers = default_headers.merge(custom_headers)
       
-      expect(connection).to receive(:send).with(
-        method: :post,
-        path: "v1/events/send",
-        headers: expected_headers,
-        params: {},
-        body: hash_including(eventName: event_name, email: email)
-      ) do |**_kwargs, &block|
+      expect(connection).to receive(:send).with(:post) do |&block|
         req = double("req")
+        expect(req).to receive(:url).with("v1/events/send")
+        expect(req).to receive(:headers=).with(expected_headers)
+        expect(req).to receive(:params=).with({})
         expect(req).to receive(:body=) do |body|
           parsed_body = JSON.parse(body)
           expect(parsed_body["eventName"]).to eq(event_name)
@@ -148,7 +132,7 @@ RSpec.describe LoopsSdk::Events do
         block.call(req)
         response
       end
-      
+
       allow(response).to receive(:status).and_return(200)
       allow(response).to receive(:body).and_return('{"success":true}')
       
@@ -164,14 +148,11 @@ RSpec.describe LoopsSdk::Events do
       custom_headers = { "Content-Type" => custom_content_type }
       expected_headers = default_headers.merge(custom_headers)
       
-      expect(connection).to receive(:send).with(
-        method: :post,
-        path: "v1/events/send",
-        headers: expected_headers,
-        params: {},
-        body: hash_including(eventName: event_name, email: email)
-      ) do |**_kwargs, &block|
+      expect(connection).to receive(:send).with(:post) do |&block|
         req = double("req")
+        expect(req).to receive(:url).with("v1/events/send")
+        expect(req).to receive(:headers=).with(expected_headers)
+        expect(req).to receive(:params=).with({})
         expect(req).to receive(:body=) do |body|
           parsed_body = JSON.parse(body)
           expect(parsed_body["eventName"]).to eq(event_name)
@@ -180,7 +161,7 @@ RSpec.describe LoopsSdk::Events do
         block.call(req)
         response
       end
-      
+
       allow(response).to receive(:status).and_return(200)
       allow(response).to receive(:body).and_return('{"success":true}')
       

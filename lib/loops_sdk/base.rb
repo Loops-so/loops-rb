@@ -21,19 +21,15 @@ module LoopsSdk
       end
 
       def make_request(method:, path:, headers: {}, params: {}, body: nil)
-        # Merge default headers with request-specific headers
         merged_headers = LoopsSdk.configuration.connection.headers.merge(headers)
-        
-        response = LoopsSdk.configuration.connection.send(
-          method: method,
-          path: path,
-          headers: merged_headers,
-          params: params,
-          body: body
-        ) do |req|
-          req.body = body.to_json if body
-          req
+
+        response = LoopsSdk.configuration.connection.send(method) do |req|
+          req.url path
+          req.headers = merged_headers
+          req.params = params
+          req.body = body ? body.to_json : nil
         end
+
         handle_response(response)
       end
     end

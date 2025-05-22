@@ -15,102 +15,137 @@ RSpec.describe LoopsSdk::Base do
   before do
     allow(LoopsSdk.configuration).to receive(:connection).and_return(connection)
     allow(connection).to receive(:headers).and_return(default_headers)
+    # Make make_request public for testing
+    described_class.class_eval { public_class_method :make_request }
   end
 
   describe ".make_request" do
-    let(:params) { { key: "value" } }
-    let(:body) { { data: "test" } }
+    let(:path) { "v1/test" }
+    let(:method) { :get }
+    let(:params) { { foo: "bar" } }
+    let(:body) { { baz: "qux" } }
+    let(:headers) { { "Custom-Header" => "value" } }
+    let(:merged_headers) { default_headers.merge(headers) }
 
-    context "with successful response" do
-      it "makes a successful request and parses JSON response" do
-        expect(connection).to receive(:send).with(
-          method: :get,
-          path: "/test",
-          headers: default_headers,
-          params: params,
-          body: nil
-        ) do |**_kwargs, &block|
-          req = double("req")
-          block.call(req)
-          response
-        end
-        allow(response).to receive(:status).and_return(200)
-        allow(response).to receive(:body).and_return('{"data":"test"}')
-        result = described_class.send(:make_request, method: :get, path: "/test", params: params)
-        expect(result).to eq({ "data" => "test" })
+    it "makes a successful GET request" do
+      expect(connection).to receive(:send).with(:get) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with(path)
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with(params)
+        expect(req).to receive(:body=).with(nil)
+        block.call(req)
+        response
       end
 
-      it "includes body in request when provided" do
-        expect(connection).to receive(:send).with(
-          method: :post,
-          path: "/test",
-          headers: default_headers,
-          params: {},
-          body: body
-        ) do |**_kwargs, &block|
-          req = double("req")
-          expect(req).to receive(:body=) do |request_body|
-            expect(JSON.parse(request_body)).to eq(JSON.parse(body.to_json))
-          end
-          block.call(req)
-          response
-        end
-        allow(response).to receive(:status).and_return(200)
-        allow(response).to receive(:body).and_return('{"success":true}')
-        result = described_class.send(:make_request, method: :post, path: "/test", body: body)
-        expect(result).to eq({ "success" => true })
-      end
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"success":true}')
+
+      result = described_class.make_request(method: method, path: path, params: params)
+      expect(result).to eq({ "success" => true })
     end
 
-    context "with rate limit error" do
-      it "raises RateLimitError" do
-        expect(connection).to receive(:send).with(
-          method: :get,
-          path: "/test",
-          headers: default_headers,
-          params: params,
-          body: nil
-        ) do |**_kwargs, &block|
-          req = double("req")
-          block.call(req)
-          response
+    it "includes body in POST request" do
+      expect(connection).to receive(:send).with(:post) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with(path)
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=) do |body|
+          expect(JSON.parse(body)).to eq(JSON.parse({ baz: "qux" }.to_json))
         end
-        allow(response).to receive(:status).and_return(429)
-        allow(response).to receive(:headers).and_return(
-          "x-ratelimit-limit" => "100",
-          "x-ratelimit-remaining" => "0"
-        )
-        expect {
-          described_class.send(:make_request, method: :get, path: "/test", params: params)
-        }.to raise_error(LoopsSdk::RateLimitError) do |error|
-          expect(error.limit).to eq("100")
-          expect(error.remaining).to eq("0")
-        end
+        block.call(req)
+        response
       end
+
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"success":true}')
+
+      result = described_class.make_request(method: :post, path: path, body: body)
+      expect(result).to eq({ "success" => true })
     end
 
-    context "with API error" do
-      it "raises APIError with status and message" do
-        expect(connection).to receive(:send).with(
-          method: :get,
-          path: "/test",
-          headers: default_headers,
-          params: params,
-          body: nil
-        ) do |**_kwargs, &block|
-          req = double("req")
-          block.call(req)
-          response
-        end
-        allow(response).to receive(:status).and_return(400)
-        allow(response).to receive(:body).and_return('{"message":"Bad Request"}')
-        expect {
-          described_class.send(:make_request, method: :get, path: "/test", params: params)
-        }.to raise_error(LoopsSdk::APIError) do |error|
-          expect(error.statusCode).to eq(400)
-          expect(error.json).to eq('{"message":"Bad Request"}')
-        end
+    it "includes custom headers merged with default headers" do
+      expect(connection).to receive(:send).with(:get) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with(path)
+        expect(req).to receive(:headers=).with(merged_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=).with(nil)
+        block.call(req)
+        response
       end
+
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"success":true}')
+
+      result = described_class.make_request(method: method, path: path, headers: headers)
+      expect(result).to eq({ "success" => true })
+    end
+
+    it "allows custom headers to override default headers" do
+      custom_content_type = "application/xml"
+      custom_headers = { "Content-Type" => custom_content_type }
+      expected_headers = default_headers.merge(custom_headers)
+
+      expect(connection).to receive(:send).with(:get) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with(path)
+        expect(req).to receive(:headers=).with(expected_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=).with(nil)
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"success":true}')
+
+      result = described_class.make_request(method: method, path: path, headers: custom_headers)
+      expect(result).to eq({ "success" => true })
+    end
+
+    it "raises an error when the API returns an error" do
+      expect(connection).to receive(:send).with(:get) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with(path)
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=).with(nil)
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(400)
+      allow(response).to receive(:body).and_return('{"error":"Bad Request"}')
+      allow(response).to receive(:headers).and_return({})
+
+      expect {
+        described_class.make_request(method: method, path: path)
+      }.to raise_error(LoopsSdk::APIError, "API request failed with status 400")
+    end
+
+    it "raises a rate limit error when the API returns 429" do
+      expect(connection).to receive(:send).with(:get) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with(path)
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=).with(nil)
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(429)
+      allow(response).to receive(:body).and_return('{"error":"Rate limit exceeded"}')
+      allow(response).to receive(:headers).and_return({
+        "x-ratelimit-limit" => "100",
+        "x-ratelimit-remaining" => "0"
+      })
+
+      expect {
+        described_class.make_request(method: method, path: path)
+      }.to raise_error(LoopsSdk::RateLimitError, "Rate limit of 100 requests per second exceeded.")
     end
   end
 
