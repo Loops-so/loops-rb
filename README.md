@@ -209,7 +209,7 @@ This method will return a success or error message:
 
 Update a contact. This method will create a contact if one doesn't already exist.
 
-Note: To update a contact's email address, the contact requires a `userId` value. Then you can make a request with their `userId` and an updated email address.
+Note: To update a contact's email address, the contact requires a `user_id` value. Then you can make a request with their `user_id` and an updated email address.
 
 [API Reference](https://loops.so/docs/api-reference/update-contact)
 
@@ -234,12 +234,10 @@ response = LoopsSdk::Contacts.update(
   properties: contact_properties
 )
 
-# Updating a contact's email address using userId
+# Updating a contact's email address using user_id
 response = LoopsSdk::Contacts.update(
   email: "newemail@gmail.com",
-  properties: {
-    userId: "1234",
-  }
+  user_id: "1234"
 )
 
 # Subscribing a contact to a mailing list
