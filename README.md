@@ -207,7 +207,7 @@ This method will return a success or error message:
 
 ### Contacts.update()
 
-Update a contact.
+Update a contact. This method will create a contact if one doesn't already exist.
 
 Note: To update a contact's email address, the contact requires a `userId` value. Then you can make a request with their `userId` and an updated email address.
 
@@ -217,7 +217,8 @@ Note: To update a contact's email address, the contact requires a `userId` value
 
 | Name            | Type   | Required | Notes                                                                                                                                                                                                                                                                                                                                                                                                               |
 | --------------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `email`         | string | Yes      | The email address of the contact to update. If there is no contact with this email address, a new contact will be created using the email and properties in this request.                                                                                                                                                                                                                                           |
+| `email`         | string | No       | The email address of the contact to update. If there is no contact with this email address, a new contact will be created using the email and properties in this request. Required if `user_id` is not present.                                                                                                                                                                                                     |
+| `user_id`       | string | No       | The contact's unique user ID. If you use `user_id` without `email`, this value must have already been added to your contact in Loops. Required if `email` is not present.                                                                                                                                                                                                                                           |
 | `properties`    | object | No       | An object containing default and any custom properties for your contact.<br />Please [add custom properties](https://loops.so/docs/contacts/properties#custom-contact-properties) in your Loops account before using them with the SDK.<br />Values can be of type `string`, `number`, `nil` (to reset a value), `boolean` or `date` ([see allowed date formats](https://loops.so/docs/contacts/properties#dates)). |
 | `mailing_lists` | object | No       | An object of mailing list IDs and boolean subscription statuses.                                                                                                                                                                                                                                                                                                                                                    |
 
@@ -238,6 +239,14 @@ response = LoopsSdk::Contacts.update(
   email: "newemail@gmail.com",
   properties: {
     userId: "1234",
+  }
+)
+
+# Subscribing a contact to a mailing list
+response = LoopsSdk::Contacts.update(
+  email: "hello@gmail.com",
+  mailing_lists: {
+    cm06f5v0e45nf0ml5754o9cix: true,
   }
 )
 ```

@@ -17,6 +17,89 @@ RSpec.describe LoopsSdk::Contacts do
     allow(connection).to receive(:headers).and_return(default_headers)
   end
 
+  describe ".update" do
+    context "when updating by email" do
+      let(:email) { "test@example.com" }
+      let(:properties) { { firstName: "Updated", lastName: "User" } }
+      let(:mailing_lists) { { "list_123" => true } }
+      let(:expected_response) do
+        {
+          "success" => true,
+          "id" => "contact_123"
+        }
+      end
+
+      it "makes a PUT request to update a contact by email" do
+        expect(connection).to receive(:send).with(:put) do |&block|
+          req = double("req")
+          expect(req).to receive(:url).with("v1/contacts/update")
+          expect(req).to receive(:headers=).with(default_headers)
+          expect(req).to receive(:params=).with({})
+          expect(req).to receive(:body=).with({
+            email: email,
+            userId: nil,
+            mailingLists: mailing_lists,
+            firstName: "Updated",
+            lastName: "User"
+          }.to_json)
+          block.call(req)
+          response
+        end
+
+        allow(response).to receive(:status).and_return(200)
+        allow(response).to receive(:body).and_return(expected_response.to_json)
+        allow(response).to receive(:headers).and_return({})
+
+        result = described_class.update(email: email, properties: properties, mailing_lists: mailing_lists)
+        expect(result).to eq(expected_response)
+      end
+    end
+
+    context "when updating by user_id" do
+      let(:user_id) { "user_123" }
+      let(:properties) { { firstName: "Updated", lastName: "User" } }
+      let(:expected_response) do
+        {
+          "success" => true,
+          "id" => "contact_123"
+        }
+      end
+
+      it "makes a PUT request to update a contact by user_id" do
+        expect(connection).to receive(:send).with(:put) do |&block|
+          req = double("req")
+          expect(req).to receive(:url).with("v1/contacts/update")
+          expect(req).to receive(:headers=).with(default_headers)
+          expect(req).to receive(:params=).with({})
+          expect(req).to receive(:body=).with({
+            email: nil,
+            userId: user_id,
+            mailingLists: {},
+            firstName: "Updated",
+            lastName: "User"
+          }.to_json)
+          block.call(req)
+          response
+        end
+
+        allow(response).to receive(:status).and_return(200)
+        allow(response).to receive(:body).and_return(expected_response.to_json)
+        allow(response).to receive(:headers).and_return({})
+
+        result = described_class.update(user_id: user_id, properties: properties)
+        expect(result).to eq(expected_response)
+      end
+    end
+
+    context "when neither email nor user_id is provided" do
+      it "raises an ArgumentError" do
+        expect {
+          described_class.update(properties: { firstName: "Test" })
+        }.to raise_error(ArgumentError, "You must provide an email or user_id value.")
+      end
+    end
+  end
+
   describe ".find" do
     context "when searching by email" do
       let(:email) { "test@example.com" }

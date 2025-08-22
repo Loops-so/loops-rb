@@ -11,9 +11,12 @@ module LoopsSdk
         make_request(method: :post, path: "v1/contacts/create", body: contact_data)
       end
 
-      def update(email:, properties: {}, mailing_lists: {})
+      def update(email: nil, user_id: nil, properties: {}, mailing_lists: {})
+        raise ArgumentError, "You must provide an email or user_id value." if email.nil? && user_id.nil?
+
         contact_data = {
           email: email,
+          userId: user_id,
           mailingLists: mailing_lists
         }.merge(properties)
         make_request(method: :put, path: "v1/contacts/update", body: contact_data)

@@ -1,3 +1,7 @@
+## v2.0.0 - Aug 22, 2025
+
+Added support for using either `email` or `user_id` with `Contacts.update()`.
+
 ## v1.2.1 - May 22, 2025
 
 Fixed issue with `GET` API requests.
