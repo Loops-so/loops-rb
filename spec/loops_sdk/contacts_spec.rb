@@ -231,4 +231,176 @@ RSpec.describe LoopsSdk::Contacts do
       end
     end
   end
+
+  describe ".check_suppression" do
+    context "when checking by email" do
+      let(:email) { "test@example.com" }
+      let(:expected_response) do
+        {
+          "contact" => {
+            "id" => "contact_123",
+            "email" => email,
+            "userId" => nil
+          },
+          "isSuppressed" => true,
+          "removalQuota" => {
+            "limit" => 100,
+            "remaining" => 5
+          }
+        }
+      end
+
+      it "makes a GET request to check suppression by email" do
+        expect(connection).to receive(:send).with(:get) do |&block|
+          req = double("req")
+          expect(req).to receive(:url).with("v1/contacts/suppression")
+          expect(req).to receive(:headers=).with(default_headers)
+          expect(req).to receive(:params=).with({ email: email })
+          expect(req).to receive(:body=).with(nil)
+          block.call(req)
+          response
+        end
+
+        allow(response).to receive(:status).and_return(200)
+        allow(response).to receive(:body).and_return(expected_response.to_json)
+        allow(response).to receive(:headers).and_return({})
+
+        result = described_class.check_suppression(email: email)
+        expect(result).to eq(expected_response)
+      end
+    end
+
+    context "when checking by user_id" do
+      let(:user_id) { "user_123" }
+      let(:expected_response) do
+        {
+          "contact" => {
+            "id" => "contact_123",
+            "email" => "test@example.com",
+            "userId" => user_id
+          },
+          "isSuppressed" => false,
+          "removalQuota" => {
+            "limit" => 100,
+            "remaining" => 5
+          }
+        }
+      end
+
+      it "makes a GET request to check suppression by user_id" do
+        expect(connection).to receive(:send).with(:get) do |&block|
+          req = double("req")
+          expect(req).to receive(:url).with("v1/contacts/suppression")
+          expect(req).to receive(:headers=).with(default_headers)
+          expect(req).to receive(:params=).with({ userId: user_id })
+          expect(req).to receive(:body=).with(nil)
+          block.call(req)
+          response
+        end
+
+        allow(response).to receive(:status).and_return(200)
+        allow(response).to receive(:body).and_return(expected_response.to_json)
+        allow(response).to receive(:headers).and_return({})
+
+        result = described_class.check_suppression(user_id: user_id)
+        expect(result).to eq(expected_response)
+      end
+    end
+
+    context "when validation fails" do
+      it "raises an error when both email and user_id are provided" do
+        expect {
+          described_class.check_suppression(email: "test@example.com", user_id: "user_123")
+        }.to raise_error(ArgumentError, "Only one parameter is permitted.")
+      end
+
+      it "raises an error when neither email nor user_id is provided" do
+        expect {
+          described_class.check_suppression
+        }.to raise_error(ArgumentError, "You must provide an email or user_id value.")
+      end
+    end
+  end
+
+  describe ".remove_suppression" do
+    context "when removing by email" do
+      let(:email) { "test@example.com" }
+      let(:expected_response) do
+        {
+          "success" => true,
+          "message" => "Email removed from suppression list.",
+          "removalQuota" => {
+            "limit" => 100,
+            "remaining" => 4
+          }
+        }
+      end
+
+      it "makes a DELETE request to remove suppression by email" do
+        expect(connection).to receive(:send).with(:delete) do |&block|
+          req = double("req")
+          expect(req).to receive(:url).with("v1/contacts/suppression")
+          expect(req).to receive(:headers=).with(default_headers)
+          expect(req).to receive(:params=).with({ email: email })
+          expect(req).to receive(:body=).with(nil)
+          block.call(req)
+          response
+        end
+
+        allow(response).to receive(:status).and_return(200)
+        allow(response).to receive(:body).and_return(expected_response.to_json)
+        allow(response).to receive(:headers).and_return({})
+
+        result = described_class.remove_suppression(email: email)
+        expect(result).to eq(expected_response)
+      end
+    end
+
+    context "when removing by user_id" do
+      let(:user_id) { "user_123" }
+      let(:expected_response) do
+        {
+          "success" => true,
+          "message" => "Email removed from suppression list.",
+          "removalQuota" => {
+            "limit" => 100,
+            "remaining" => 4
+          }
+        }
+      end
+
+      it "makes a DELETE request to remove suppression by user_id" do
+        expect(connection).to receive(:send).with(:delete) do |&block|
+          req = double("req")
+          expect(req).to receive(:url).with("v1/contacts/suppression")
+          expect(req).to receive(:headers=).with(default_headers)
+          expect(req).to receive(:params=).with({ userId: user_id })
+          expect(req).to receive(:body=).with(nil)
+          block.call(req)
+          response
+        end
+
+        allow(response).to receive(:status).and_return(200)
+        allow(response).to receive(:body).and_return(expected_response.to_json)
+        allow(response).to receive(:headers).and_return({})
+
+        result = described_class.remove_suppression(user_id: user_id)
+        expect(result).to eq(expected_response)
+      end
+    end
+
+    context "when validation fails" do
+      it "raises an error when both email and user_id are provided" do
+        expect {
+          described_class.remove_suppression(email: "test@example.com", user_id: "user_123")
+        }.to raise_error(ArgumentError, "Only one parameter is permitted.")
+      end
+
+      it "raises an error when neither email nor user_id is provided" do
+        expect {
+          described_class.remove_suppression
+        }.to raise_error(ArgumentError, "You must provide an email or user_id value.")
+      end
+    end
+  end
 end 

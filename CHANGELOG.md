@@ -1,3 +1,7 @@
+## Unreleased
+
+- Added support for contact suppression endpoints with `Contacts.check_suppression()` and `Contacts.remove_suppression()`.
+
 ## v2.0.0 - Aug 22, 2025
 
 Added support for using either `email` or `user_id` with `Contacts.update()`.

@@ -37,6 +37,22 @@ module LoopsSdk
         body = email ? { email: email } : { userId: user_id }
         make_request(method: :post, path: "v1/contacts/delete", body: body)
       end
+
+      def check_suppression(email: nil, user_id: nil)
+        raise ArgumentError, "Only one parameter is permitted." if email && user_id
+        raise ArgumentError, "You must provide an email or user_id value." if email.nil? && user_id.nil?
+
+        params = email ? { email: email } : { userId: user_id }
+        make_request(method: :get, path: "v1/contacts/suppression", params: params)
+      end
+
+      def remove_suppression(email: nil, user_id: nil)
+        raise ArgumentError, "Only one parameter is permitted." if email && user_id
+        raise ArgumentError, "You must provide an email or user_id value." if email.nil? && user_id.nil?
+
+        params = email ? { email: email } : { userId: user_id }
+        make_request(method: :delete, path: "v1/contacts/suppression", params: params)
+      end
     end
   end
 end

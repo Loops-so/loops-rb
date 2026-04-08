@@ -108,6 +108,8 @@ You can use custom contact properties in API calls. Please make sure to [add cus
 - [Contacts.update()](#contactsupdate)
 - [Contacts.find()](#contactsfind)
 - [Contacts.delete()](#contactsdelete)
+- [Contacts.check_suppression()](#contactscheck_suppression)
+- [Contacts.remove_suppression()](#contactsremove_suppression)
 - [ContactProperties.create()](#contactpropertiescreate)
 - [ContactProperties.list()](#contactpropertieslist)
 - [MailingLists.list()](#mailinglistslist)
@@ -359,6 +361,104 @@ This method will return a success or error message:
 {
   "success": false,
   "message": "An error message here."
+}
+```
+
+---
+
+### Contacts.check_suppression()
+
+Check if a contact is suppressed.
+
+[API Reference](https://loops.so/docs/api-reference/check-contact-suppression)
+
+#### Parameters
+
+You must use one parameter in the request.
+
+| Name      | Type   | Required | Notes |
+| --------- | ------ | -------- | ----- |
+| `email`   | string | No       |       |
+| `user_id` | string | No       |       |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Contacts.check_suppression(email: "hello@gmail.com")
+
+response = LoopsSdk::Contacts.check_suppression(user_id: "12345")
+```
+
+#### Response
+
+This method will return the suppression status for a contact and the suppression removal quota.
+
+```json
+{
+  "contact": {
+    "id": "cll6b3i8901a9jx0oyktl2m4u",
+    "email": "hello@gmail.com",
+    "userId": "12345"
+  },
+  "isSuppressed": true,
+  "removalQuota": {
+    "limit": 100,
+    "remaining": 4
+  }
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "An email or userId is required."
+}
+```
+
+---
+
+### Contacts.remove_suppression()
+
+Remove suppression for a contact.
+
+[API Reference](https://loops.so/docs/api-reference/remove-contact-suppression)
+
+#### Parameters
+
+You must use one parameter in the request.
+
+| Name      | Type   | Required | Notes |
+| --------- | ------ | -------- | ----- |
+| `email`   | string | No       |       |
+| `user_id` | string | No       |       |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Contacts.remove_suppression(email: "hello@gmail.com")
+
+response = LoopsSdk::Contacts.remove_suppression(user_id: "12345")
+```
+
+#### Response
+
+This method will return a success or error message:
+
+```json
+{
+  "success": true,
+  "message": "Email removed from suppression list.",
+  "removalQuota": {
+    "limit": 100,
+    "remaining": 4
+  }
+}
+```
+
+```json
+{
+  "success": false,
+  "message": "This contact is not suppressed."
 }
 ```
 
