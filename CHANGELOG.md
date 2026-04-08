@@ -1,4 +1,4 @@
-## Unreleased
+## v2.1.0 - Aug 8, 2026
 
 - Added support for contact suppression endpoints with `Contacts.check_suppression()` and `Contacts.remove_suppression()`.
 
