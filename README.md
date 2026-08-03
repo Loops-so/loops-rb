@@ -868,6 +868,21 @@ Get a single transactional email by ID.
 response = LoopsSdk::Transactional.get(transactional_id: "clfq6dinn000yl70fgwwyp82l")
 ```
 
+#### Response
+
+```json
+{
+  "id": "cll42l54f20i1la0lfooe3z12",
+  "name": "Sign up confirmation",
+  "draftEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "publishedEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "transactionalGroupId": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "dataVariables": ["confirmationUrl"]
+}
+```
+
 ---
 
 ### Transactional.update()
@@ -895,6 +910,21 @@ response = LoopsSdk::Transactional.update(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "cll42l54f20i1la0lfooe3z12",
+  "name": "Updated name",
+  "draftEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "publishedEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "transactionalGroupId": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "dataVariables": ["confirmationUrl"]
+}
+```
+
 ---
 
 ### Transactional.ensure_draft()
@@ -915,6 +945,22 @@ Ensure a transactional email has a draft email message. If a draft already exist
 response = LoopsSdk::Transactional.ensure_draft(transactional_id: "clfq6dinn000yl70fgwwyp82l")
 ```
 
+#### Response
+
+```json
+{
+  "id": "cll42l54f20i1la0lfooe3z12",
+  "name": "Sign up confirmation",
+  "draftEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "draftEmailMessageContentRevisionId": "clrev1s10n2i3d4e5f6g7h8",
+  "publishedEmailMessageId": null,
+  "transactionalGroupId": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "dataVariables": []
+}
+```
+
 ---
 
 ### Transactional.publish()
@@ -933,6 +979,21 @@ Publish a transactional email's current draft. The draft becomes the published v
 
 ```ruby
 response = LoopsSdk::Transactional.publish(transactional_id: "clfq6dinn000yl70fgwwyp82l")
+```
+
+#### Response
+
+```json
+{
+  "id": "cll42l54f20i1la0lfooe3z12",
+  "name": "Sign up confirmation",
+  "draftEmailMessageId": null,
+  "publishedEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "transactionalGroupId": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "dataVariables": []
+}
 ```
 
 ---
@@ -1077,6 +1138,31 @@ response = LoopsSdk::Themes.list
 response = LoopsSdk::Themes.list(perPage: 15, cursor: "cursor_value")
 ```
 
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "clo1z5q7s004yl70y3z4a5b6c",
+      "name": "Default",
+      "styles": { "backgroundColor": "#ffffff" },
+      "isDefault": true,
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z"
+    }
+  ]
+}
+```
+
 ---
 
 ### Themes.get()
@@ -1095,6 +1181,19 @@ Get a single theme by ID.
 
 ```ruby
 response = LoopsSdk::Themes.get(theme_id: "clo5p8q0r0132ntx6flkunw89")
+```
+
+#### Response
+
+```json
+{
+  "id": "clo1z5q7s004yl70y3z4a5b6c",
+  "name": "Default",
+  "styles": { "backgroundColor": "#ffffff" },
+  "isDefault": true,
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-01T00:00:00.000Z"
+}
 ```
 
 ---
@@ -1119,6 +1218,22 @@ response = LoopsSdk::Themes.create(
   name: "Dark mode",
   styles: { backgroundColor: "#111827", bodyColor: "#1f2937" }
 )
+```
+
+#### Response
+
+```json
+{
+  "id": "clt3u5v7w9x1y3z5a7b9c1d3",
+  "name": "Dark mode",
+  "styles": {
+    "backgroundColor": "#111827",
+    "bodyColor": "#1f2937"
+  },
+  "isDefault": false,
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
 ```
 
 ---
@@ -1148,6 +1263,20 @@ response = LoopsSdk::Themes.update(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "clt3u5v7w9x1y3z5a7b9c1d3",
+  "name": "Updated theme",
+  "styles": { "backgroundColor": "#111827" },
+  "isDefault": false,
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "affectedEmailCount": 3
+}
+```
+
 ---
 
 ### Components.list()
@@ -1169,6 +1298,28 @@ List email components.
 response = LoopsSdk::Components.list
 ```
 
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "clp2a6r8t005yl70d7e8f9g0h",
+      "name": "Header",
+      "lmx": "<Paragraph>Welcome to Acme</Paragraph>"
+    }
+  ]
+}
+```
+
 ---
 
 ### Components.get()
@@ -1187,6 +1338,16 @@ Get a single component by ID.
 
 ```ruby
 response = LoopsSdk::Components.get(component_id: "clp6q9r1s0154ouy7gmlovx90")
+```
+
+#### Response
+
+```json
+{
+  "id": "clp2a6r8t005yl70d7e8f9g0h",
+  "name": "Header",
+  "lmx": "<Paragraph>Welcome to Acme</Paragraph>"
+}
 ```
 
 ---
@@ -1211,6 +1372,16 @@ response = LoopsSdk::Components.create(
   name: "Header",
   lmx: "<Paragraph>Welcome to Acme</Paragraph>"
 )
+```
+
+#### Response
+
+```json
+{
+  "id": "clp2a6r8t005yl70d7e8f9g0h",
+  "name": "Header",
+  "lmx": "<Paragraph>Welcome to Acme</Paragraph>"
+}
 ```
 
 ---
@@ -1240,6 +1411,17 @@ response = LoopsSdk::Components.update(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "clp2a6r8t005yl70d7e8f9g0h",
+  "name": "Updated Header",
+  "lmx": "<Paragraph>Welcome to Acme</Paragraph>",
+  "affectedEmailCount": 2
+}
+```
+
 ---
 
 ### Campaigns.list()
@@ -1259,6 +1441,36 @@ List campaigns.
 
 ```ruby
 response = LoopsSdk::Campaigns.list
+```
+
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "cln0y4p6r003yl70i1j2k3l4m",
+      "emailMessageId": "clm9x3o5q002yl70a8b3c4d5e",
+      "name": "Spring announcement",
+      "status": "Draft",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z",
+      "campaignGroupId": null,
+      "mailingListId": null,
+      "audienceSegmentId": null,
+      "audienceFilter": null,
+      "scheduling": { "method": "now", "timestamp": null }
+    }
+  ]
+}
 ```
 
 ---
@@ -1292,6 +1504,25 @@ response = LoopsSdk::Campaigns.create(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "cln0y4p6r003yl70i1j2k3l4m",
+  "name": "Spring announcement",
+  "status": "Draft",
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-01T00:00:00.000Z",
+  "emailMessageId": "clm9x3o5q002yl70a8b3c4d5e",
+  "emailMessageContentRevisionId": "clv8g2x4z012yl70n5o6p7q8r",
+  "campaignGroupId": null,
+  "mailingListId": null,
+  "audienceSegmentId": null,
+  "audienceFilter": null,
+  "scheduling": { "method": "now", "timestamp": null }
+}
+```
+
 ---
 
 ### Campaigns.get()
@@ -1310,6 +1541,24 @@ Get a single campaign by ID.
 
 ```ruby
 response = LoopsSdk::Campaigns.get(campaign_id: "cln4o7p9q0110msw5ekjtmv78")
+```
+
+#### Response
+
+```json
+{
+  "id": "cln0y4p6r003yl70i1j2k3l4m",
+  "name": "Spring announcement",
+  "status": "Draft",
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-01T00:00:00.000Z",
+  "emailMessageId": "clm9x3o5q002yl70a8b3c4d5e",
+  "campaignGroupId": null,
+  "mailingListId": null,
+  "audienceSegmentId": null,
+  "audienceFilter": null,
+  "scheduling": { "method": "now", "timestamp": null }
+}
 ```
 
 ---
@@ -1343,6 +1592,24 @@ response = LoopsSdk::Campaigns.update(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "cln0y4p6r003yl70i1j2k3l4m",
+  "name": "Updated campaign name",
+  "status": "Draft",
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-02T00:00:00.000Z",
+  "emailMessageId": "clm9x3o5q002yl70a8b3c4d5e",
+  "campaignGroupId": null,
+  "mailingListId": null,
+  "audienceSegmentId": null,
+  "audienceFilter": null,
+  "scheduling": { "method": "now", "timestamp": null }
+}
+```
+
 ---
 
 ### EmailMessages.get()
@@ -1361,6 +1628,24 @@ Get an email message, including its LMX content.
 
 ```ruby
 response = LoopsSdk::EmailMessages.get(email_message_id: "cly8k3m0n0044jpx2bghepq45")
+```
+
+#### Response
+
+```json
+{
+  "id": "clm9x3o5q002yl70a8b3c4d5e",
+  "campaignId": "cln0y4p6r003yl70i1j2k3l4m",
+  "subject": "Hello",
+  "previewText": "Preview text",
+  "fromName": "Loops",
+  "fromEmail": "hello",
+  "replyToEmail": "",
+  "emailFormat": "styled",
+  "lmx": "<H1>...</H1><Paragraph>...</Paragraph>",
+  "contentRevisionId": "clv8g2x4z012yl70n5o6p7q8r",
+  "updatedAt": "2025-01-01T00:00:00.000Z"
+}
 ```
 
 ---
@@ -1401,8 +1686,26 @@ response = LoopsSdk::EmailMessages.update(
   preview_text: "See what's new",
   from_name: "Loops",
   from_email: "hello",
-  lmx: "<Email><Style /></Email>"
+  lmx: "<Style /><Paragraph>...</Paragraph>"
 )
+```
+
+#### Response
+
+```json
+{
+  "id": "clm9x3o5q002yl70a8b3c4d5e",
+  "campaignId": "cln0y4p6r003yl70i1j2k3l4m",
+  "subject": "Spring announcement",
+  "previewText": "See what's new",
+  "fromName": "Loops",
+  "fromEmail": "hello",
+  "replyToEmail": "",
+  "emailFormat": "styled",
+  "lmx": "<Style /><Paragraph>...</Paragraph>",
+  "contentRevisionId": "clv8g2x4z013yl70s9t0u1v2w",
+  "updatedAt": "2025-01-02T00:00:00.000Z"
+}
 ```
 
 ---
@@ -1433,6 +1736,14 @@ response = LoopsSdk::EmailMessages.preview(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "cle5f7g9h1i3j5k7l9m1n3p5"
+}
+```
+
 ---
 
 ### EmailMessages.run_guardian()
@@ -1457,7 +1768,14 @@ response = LoopsSdk::EmailMessages.run_guardian(email_message_id: "cly8k3m0n0044
 
 ```json
 {
-  "errors": [],
+  "errors": [
+    {
+      "rule": "missingButtonHrefs",
+      "title": "Missing button link",
+      "description": "Buttons won't work without href value",
+      "items": [{ "label": "Click here" }]
+    }
+  ],
   "warnings": []
 }
 ```
@@ -1483,6 +1801,30 @@ List campaign groups.
 response = LoopsSdk::CampaignGroups.list
 ```
 
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+      "name": "Newsletters",
+      "description": "Monthly product updates",
+      "createdAt": "2025-06-29T07:47:39.370Z",
+      "updatedAt": "2025-06-29T07:47:39.370Z"
+    }
+  ]
+}
+```
+
 ---
 
 ### CampaignGroups.create()
@@ -1504,6 +1846,18 @@ Create a campaign group.
 response = LoopsSdk::CampaignGroups.create(name: "Newsletters", description: "Monthly updates")
 ```
 
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Newsletters",
+  "description": "Monthly updates",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
+```
+
 ---
 
 ### CampaignGroups.get()
@@ -1522,6 +1876,18 @@ Get a campaign group by ID.
 
 ```ruby
 response = LoopsSdk::CampaignGroups.get(campaign_group_id: "clq7r0s2t0176pvz8hnmpwy01")
+```
+
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Newsletters",
+  "description": "Monthly product updates",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
 ```
 
 ---
@@ -1551,6 +1917,18 @@ response = LoopsSdk::CampaignGroups.update(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Updated name",
+  "description": "Monthly product updates",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
+```
+
 ---
 
 ### AudienceSegments.list()
@@ -1572,6 +1950,36 @@ List audience segments.
 response = LoopsSdk::AudienceSegments.list
 ```
 
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "cls6e8g0i2k4m6o8q0s2u4w6",
+      "name": "Power users",
+      "description": "Contacts on the pro plan",
+      "createdAt": "2025-06-29T07:47:39.370Z",
+      "updatedAt": "2025-06-29T07:47:39.370Z",
+      "filter": {
+        "match": "all",
+        "conditions": [
+          { "type": "property", "key": "plan", "operator": "equals", "value": "pro" }
+        ]
+      }
+    }
+  ]
+}
+```
+
 ---
 
 ### AudienceSegments.get()
@@ -1590,6 +1998,24 @@ Get an audience segment by ID.
 
 ```ruby
 response = LoopsSdk::AudienceSegments.get(audience_segment_id: "clr8s1t3u0198qw09iotqzx12")
+```
+
+#### Response
+
+```json
+{
+  "id": "cls6e8g0i2k4m6o8q0s2u4w6",
+  "name": "Power users",
+  "description": "Contacts on the pro plan",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "filter": {
+    "match": "all",
+    "conditions": [
+      { "type": "property", "key": "plan", "operator": "equals", "value": "pro" }
+    ]
+  }
+}
 ```
 
 ---
@@ -1622,6 +2048,24 @@ response = LoopsSdk::AudienceSegments.create(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "cls6e8g0i2k4m6o8q0s2u4w6",
+  "name": "Power users",
+  "description": null,
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "filter": {
+    "match": "all",
+    "conditions": [
+      { "type": "property", "key": "plan", "operator": "equals", "value": "pro" }
+    ]
+  }
+}
+```
+
 ---
 
 ### Workflows.list()
@@ -1641,6 +2085,29 @@ List workflows.
 
 ```ruby
 response = LoopsSdk::Workflows.list
+```
+
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+      "name": "Onboarding",
+      "createdAt": "2025-06-29T07:47:39.370Z",
+      "updatedAt": "2025-06-29T07:47:39.370Z"
+    }
+  ]
+}
 ```
 
 ---
@@ -1665,6 +2132,29 @@ Create a draft workflow with a blank trigger and exit node.
 response = LoopsSdk::Workflows.create(name: "Welcome series")
 ```
 
+#### Response
+
+```json
+{
+  "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+  "status": "Draft",
+  "name": "Welcome series",
+  "mailingListId": null,
+  "rootNodeId": "cf16k73gq014h3mmj5b6jdi9r",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "nodes": {
+    "cf16k73gq014h3mmj5b6jdi9r": {
+      "typeName": "BlankTrigger",
+      "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"]
+    },
+    "cf16k73gq014h3mmj5b4jdifg": {
+      "typeName": "ExitAction",
+      "nextNodeIds": []
+    }
+  }
+}
+```
+
 ---
 
 ### Workflows.get()
@@ -1683,6 +2173,29 @@ Get a simplified workflow graph.
 
 ```ruby
 response = LoopsSdk::Workflows.get(workflow_id: "cls9t2u4v0210rx20jpuary23")
+```
+
+#### Response
+
+```json
+{
+  "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+  "status": "Draft",
+  "name": "Onboarding",
+  "mailingListId": null,
+  "rootNodeId": "cf16k73gq014h3mmj5b6jdi9r",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "nodes": {
+    "cf16k73gq014h3mmj5b6jdi9r": {
+      "typeName": "SignupTrigger",
+      "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"]
+    },
+    "cf16k73gq014h3mmj5b4jdifg": {
+      "typeName": "ExitAction",
+      "nextNodeIds": []
+    }
+  }
+}
 ```
 
 ---
@@ -1714,6 +2227,29 @@ response = LoopsSdk::Workflows.update(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+  "status": "Draft",
+  "name": "Updated name",
+  "mailingListId": null,
+  "rootNodeId": "cf16k73gq014h3mmj5b6jdi9r",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "nodes": {
+    "cf16k73gq014h3mmj5b6jdi9r": {
+      "typeName": "BlankTrigger",
+      "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"]
+    },
+    "cf16k73gq014h3mmj5b4jdifg": {
+      "typeName": "ExitAction",
+      "nextNodeIds": []
+    }
+  }
+}
+```
+
 ---
 
 ### Workflows.change_mailing_list()
@@ -1743,6 +2279,18 @@ response = LoopsSdk::Workflows.change_mailing_list(
 )
 ```
 
+#### Response
+
+```json
+{
+  "status": "updated",
+  "mailingListId": "cm06f5v0e45nf0ml5754o9cix",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "queuedContactCount": 0,
+  "queuedContactLimitReached": false
+}
+```
+
 ---
 
 ### Workflows.get_node()
@@ -1762,6 +2310,20 @@ Get detailed data for a single workflow node.
 
 ```ruby
 response = LoopsSdk::Workflows.get_node(workflow_id: "cls9t2u4v0210rx20jpuary23", node_id: "clt0u3v5w0232sy31kqvbzs34")
+```
+
+#### Response
+
+```json
+{
+  "id": "cln8p0q2r4s6t8u0v2w4x6z8",
+  "workflowId": "clw1a3b5c7d9e1f3g5h7i9j1",
+  "typeName": "TimerAction",
+  "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"],
+  "amount": 1,
+  "unit": "h",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6"
+}
 ```
 
 ---
@@ -1797,6 +2359,45 @@ response = LoopsSdk::Workflows.create_node(
 )
 ```
 
+#### Response
+
+```json
+{
+  "node": {
+    "id": "cln8p0q2r4s6t8u0v2w4x6z8",
+    "typeName": "TimerAction",
+    "nextNodeIds": ["node_b"],
+    "amount": 0,
+    "unit": "m",
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6"
+  },
+  "workflow": {
+    "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+    "status": "Draft",
+    "name": "Welcome series",
+    "mailingListId": null,
+    "rootNodeId": "node_a",
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+    "nodes": {
+      "node_a": {
+        "typeName": "BlankTrigger",
+        "nextNodeIds": ["cln8p0q2r4s6t8u0v2w4x6z8"]
+      },
+      "cln8p0q2r4s6t8u0v2w4x6z8": {
+        "typeName": "TimerAction",
+        "nextNodeIds": ["node_b"],
+        "amount": 0,
+        "unit": "m"
+      },
+      "node_b": {
+        "typeName": "ExitAction",
+        "nextNodeIds": []
+      }
+    }
+  }
+}
+```
+
 ---
 
 ### Workflows.update_node()
@@ -1823,6 +2424,20 @@ response = LoopsSdk::Workflows.update_node(
   expected_revision_id: "rev_123",
   payload: { amount: 2, unit: "d" }
 )
+```
+
+#### Response
+
+```json
+{
+  "id": "cln8p0q2r4s6t8u0v2w4x6z8",
+  "workflowId": "clw1a3b5c7d9e1f3g5h7i9j1",
+  "typeName": "TimerAction",
+  "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"],
+  "amount": 2,
+  "unit": "d",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6"
+}
 ```
 
 ---
@@ -1854,6 +2469,18 @@ response = LoopsSdk::Workflows.delete_node(
 )
 ```
 
+#### Response
+
+```json
+{
+  "status": "deleted",
+  "nodeIds": ["clt0u3v5w0232sy31kqvbzs34"],
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "queuedContactCount": 0,
+  "queuedContactLimitReached": false
+}
+```
+
 ---
 
 ### Workflows.add_branch()
@@ -1878,6 +2505,38 @@ response = LoopsSdk::Workflows.add_branch(
   node_id: "clt0u3v5w0232sy31kqvbzs34",
   expected_revision_id: "rev_123"
 )
+```
+
+#### Response
+
+```json
+{
+  "node": {
+    "id": "cln0a2b4c6d8e0f2g4h6i8j0",
+    "typeName": "AudienceFilter",
+    "nextNodeIds": [],
+    "appliesDownstream": false,
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6"
+  },
+  "workflow": {
+    "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+    "status": "Draft",
+    "name": "Welcome series",
+    "mailingListId": null,
+    "rootNodeId": "clt0u3v5w0232sy31kqvbzs34",
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+    "nodes": {
+      "clt0u3v5w0232sy31kqvbzs34": {
+        "typeName": "BranchNode",
+        "nextNodeIds": ["cln0a2b4c6d8e0f2g4h6i8j0"]
+      },
+      "cln0a2b4c6d8e0f2g4h6i8j0": {
+        "typeName": "AudienceFilter",
+        "nextNodeIds": []
+      }
+    }
+  }
+}
 ```
 
 ---
@@ -1909,6 +2568,21 @@ response = LoopsSdk::Workflows.delete_node_recursive(
 )
 ```
 
+#### Response
+
+```json
+{
+  "status": "deleted",
+  "nodeIds": [
+    "clt0u3v5w0232sy31kqvbzs34",
+    "cln9q1r3s5t7u9v1w3x5y7z9"
+  ],
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "queuedContactCount": 0,
+  "queuedContactLimitReached": false
+}
+```
+
 ---
 
 ### EventPatterns.list()
@@ -1928,6 +2602,28 @@ List event patterns available to workflow event trigger nodes.
 
 ```ruby
 response = LoopsSdk::EventPatterns.list
+```
+
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "cle1a2b3c004yl70d5e6f7g8h",
+      "eventName": "signup",
+      "incomingWebhookPlatform": null
+    }
+  ]
+}
 ```
 
 ---
@@ -1950,6 +2646,20 @@ Get an event pattern by ID.
 response = LoopsSdk::EventPatterns.get(event_pattern_id: "cle1v2e3n4t5p6a7t8t9e0r1")
 ```
 
+#### Response
+
+```json
+{
+  "id": "cle1a2b3c004yl70d5e6f7g8h",
+  "eventName": "signup",
+  "eventProperties": [
+    { "name": "plan", "type": "string" },
+    { "name": "trialDays", "type": "number" }
+  ],
+  "incomingWebhookPlatform": null
+}
+```
+
 ---
 
 ### EventPatterns.get_by_name()
@@ -1968,6 +2678,20 @@ Get an event pattern by event name. Event names are case-sensitive.
 
 ```ruby
 response = LoopsSdk::EventPatterns.get_by_name(event_name: "signup")
+```
+
+#### Response
+
+```json
+{
+  "id": "cle1a2b3c004yl70d5e6f7g8h",
+  "eventName": "signup",
+  "eventProperties": [
+    { "name": "plan", "type": "string" },
+    { "name": "trialDays", "type": "number" }
+  ],
+  "incomingWebhookPlatform": null
+}
 ```
 
 ---
@@ -1991,6 +2715,30 @@ List transactional groups.
 response = LoopsSdk::TransactionalGroups.list
 ```
 
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+      "name": "Onboarding",
+      "description": "Top of funnel campaigns",
+      "createdAt": "2025-06-29T07:47:39.370Z",
+      "updatedAt": "2025-06-29T07:47:39.370Z"
+    }
+  ]
+}
+```
+
 ---
 
 ### TransactionalGroups.create()
@@ -2012,6 +2760,18 @@ Create a transactional group.
 response = LoopsSdk::TransactionalGroups.create(name: "Account emails")
 ```
 
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Account emails",
+  "description": "",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
+```
+
 ---
 
 ### TransactionalGroups.get()
@@ -2030,6 +2790,18 @@ Get a transactional group by ID.
 
 ```ruby
 response = LoopsSdk::TransactionalGroups.get(transactional_group_id: "clv2w3x4y0288xbb0kqrsuv67")
+```
+
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Account emails",
+  "description": "",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
 ```
 
 ---
@@ -2057,6 +2829,18 @@ response = LoopsSdk::TransactionalGroups.update(
   transactional_group_id: "clv2w3x4y0288xbb0kqrsuv67",
   name: "Updated name"
 )
+```
+
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Updated name",
+  "description": "",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
 ```
 
 ---
