@@ -13,7 +13,7 @@ module LoopsSdk
           limit = response.headers["x-ratelimit-limit"]
           remaining = response.headers["x-ratelimit-remaining"]
           raise RateLimitError.new(limit, remaining)
-        when 400, 401, 404, 405, 409, 413, 422, 500
+        when 400, 401, 404, 405, 409, 413, 422, 500, 501
           raise APIError.new(response.status, response.body)
         else
           raise APIError.new(response.status, "Unexpected error occurred")
