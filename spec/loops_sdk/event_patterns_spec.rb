@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe LoopsSdk::AudienceSegments do
+RSpec.describe LoopsSdk::EventPatterns do
   let(:connection) { instance_double(Faraday::Connection) }
   let(:response) { instance_double(Faraday::Response) }
   let(:default_headers) do
@@ -18,10 +18,10 @@ RSpec.describe LoopsSdk::AudienceSegments do
   end
 
   describe ".list" do
-    it "makes a GET request to list audience segments" do
+    it "makes a GET request to list event patterns" do
       expect(connection).to receive(:send).with(:get) do |&block|
         req = double("req")
-        expect(req).to receive(:url).with("v1/audience-segments")
+        expect(req).to receive(:url).with("v1/event-patterns")
         expect(req).to receive(:headers=).with(default_headers)
         expect(req).to receive(:params=).with({ cursor: nil, perPage: 20 })
         expect(req).to receive(:body=).with(nil)
@@ -38,10 +38,10 @@ RSpec.describe LoopsSdk::AudienceSegments do
   end
 
   describe ".get" do
-    it "makes a GET request to fetch an audience segment" do
+    it "makes a GET request to fetch an event pattern by ID" do
       expect(connection).to receive(:send).with(:get) do |&block|
         req = double("req")
-        expect(req).to receive(:url).with("v1/audience-segments/clr8s1t3u0198qw09iotqzx12")
+        expect(req).to receive(:url).with("v1/event-patterns/cle1v2e3n4t5p6a7t8t9e0r1")
         expect(req).to receive(:headers=).with(default_headers)
         expect(req).to receive(:params=).with({})
         expect(req).to receive(:body=).with(nil)
@@ -50,38 +50,30 @@ RSpec.describe LoopsSdk::AudienceSegments do
       end
 
       allow(response).to receive(:status).and_return(200)
-      allow(response).to receive(:body).and_return('{"id":"clr8s1t3u0198qw09iotqzx12"}')
+      allow(response).to receive(:body).and_return('{"id":"cle1v2e3n4t5p6a7t8t9e0r1","eventName":"signup"}')
 
-      result = described_class.get(audience_segment_id: "clr8s1t3u0198qw09iotqzx12")
-      expect(result).to eq({ "id" => "clr8s1t3u0198qw09iotqzx12" })
+      result = described_class.get(event_pattern_id: "cle1v2e3n4t5p6a7t8t9e0r1")
+      expect(result).to eq({ "id" => "cle1v2e3n4t5p6a7t8t9e0r1", "eventName" => "signup" })
     end
   end
 
-  describe ".create" do
-    it "makes a POST request to create an audience segment" do
-      filter = {
-        match: "all",
-        conditions: [{ type: "property", key: "plan", operator: "equals", value: "pro" }]
-      }
-      expected_body = { name: "Power users", filter: filter }
-
-      expect(connection).to receive(:send).with(:post) do |&block|
+  describe ".get_by_name" do
+    it "makes a GET request with a URL-encoded event name" do
+      expect(connection).to receive(:send).with(:get) do |&block|
         req = double("req")
-        expect(req).to receive(:url).with("v1/audience-segments")
+        expect(req).to receive(:url).with("v1/event-patterns/by-name/Payment%20Received")
         expect(req).to receive(:headers=).with(default_headers)
         expect(req).to receive(:params=).with({})
-        expect(req).to receive(:body=) do |body|
-          expect(JSON.parse(body)).to eq(JSON.parse(expected_body.to_json))
-        end
+        expect(req).to receive(:body=).with(nil)
         block.call(req)
         response
       end
 
       allow(response).to receive(:status).and_return(200)
-      allow(response).to receive(:body).and_return('{"id":"clr8s1t3u0198qw09iotqzx12"}')
+      allow(response).to receive(:body).and_return('{"eventName":"Payment Received"}')
 
-      result = described_class.create(name: "Power users", filter: filter)
-      expect(result).to eq({ "id" => "clr8s1t3u0198qw09iotqzx12" })
+      result = described_class.get_by_name(event_name: "Payment Received")
+      expect(result).to eq({ "eventName" => "Payment Received" })
     end
   end
 end

@@ -20,6 +20,7 @@ require_relative "loops_sdk/email_messages"
 require_relative "loops_sdk/uploads"
 require_relative "loops_sdk/audience_segments"
 require_relative "loops_sdk/workflows"
+require_relative "loops_sdk/event_patterns"
 require_relative "loops_sdk/transactional_groups"
 
 module LoopsSdk

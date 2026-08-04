@@ -52,6 +52,11 @@ module LoopsSdk
         }.compact
         make_request(method: :post, path: "v1/email-messages/#{email_message_id}/preview", body: body)
       end
+
+      def run_guardian(email_message_id:)
+        make_request(method: :get, path: "v1/email-messages/#{email_message_id}/guardian")
+      end
     end
   end
 end
+

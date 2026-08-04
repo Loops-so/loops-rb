@@ -124,8 +124,12 @@ You can use custom contact properties in API calls. Please make sure to [add cus
 - [DedicatedSendingIps.list()](#dedicatedsendingipslist)
 - [Themes.list()](#themeslist)
 - [Themes.get()](#themesget)
+- [Themes.create()](#themescreate)
+- [Themes.update()](#themesupdate)
 - [Components.list()](#componentslist)
 - [Components.get()](#componentsget)
+- [Components.create()](#componentscreate)
+- [Components.update()](#componentsupdate)
 - [Campaigns.list()](#campaignslist)
 - [Campaigns.create()](#campaignscreate)
 - [Campaigns.get()](#campaignsget)
@@ -136,12 +140,25 @@ You can use custom contact properties in API calls. Please make sure to [add cus
 - [CampaignGroups.update()](#campaigngroupsupdate)
 - [AudienceSegments.list()](#audiencesegmentslist)
 - [AudienceSegments.get()](#audiencesegmentsget)
+- [AudienceSegments.create()](#audiencesegmentscreate)
 - [Workflows.list()](#workflowslist)
+- [Workflows.create()](#workflowscreate)
 - [Workflows.get()](#workflowsget)
+- [Workflows.update()](#workflowsupdate)
+- [Workflows.change_mailing_list()](#workflowschange_mailing_list)
 - [Workflows.get_node()](#workflowsget_node)
+- [Workflows.create_node()](#workflowscreate_node)
+- [Workflows.update_node()](#workflowsupdate_node)
+- [Workflows.delete_node()](#workflowsdelete_node)
+- [Workflows.add_branch()](#workflowsadd_branch)
+- [Workflows.delete_node_recursive()](#workflowsdelete_node_recursive)
+- [EventPatterns.list()](#eventpatternslist)
+- [EventPatterns.get()](#eventpatternsget)
+- [EventPatterns.get_by_name()](#eventpatternsget_by_name)
 - [EmailMessages.get()](#emailmessagesget)
 - [EmailMessages.update()](#emailmessagesupdate)
 - [EmailMessages.preview()](#emailmessagespreview)
+- [EmailMessages.run_guardian()](#emailmessagesrun_guardian)
 - [TransactionalGroups.list()](#transactionalgroupslist)
 - [TransactionalGroups.create()](#transactionalgroupscreate)
 - [TransactionalGroups.get()](#transactionalgroupsget)
@@ -851,6 +868,21 @@ Get a single transactional email by ID.
 response = LoopsSdk::Transactional.get(transactional_id: "clfq6dinn000yl70fgwwyp82l")
 ```
 
+#### Response
+
+```json
+{
+  "id": "cll42l54f20i1la0lfooe3z12",
+  "name": "Sign up confirmation",
+  "draftEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "publishedEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "transactionalGroupId": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "dataVariables": ["confirmationUrl"]
+}
+```
+
 ---
 
 ### Transactional.update()
@@ -878,6 +910,21 @@ response = LoopsSdk::Transactional.update(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "cll42l54f20i1la0lfooe3z12",
+  "name": "Updated name",
+  "draftEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "publishedEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "transactionalGroupId": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "dataVariables": ["confirmationUrl"]
+}
+```
+
 ---
 
 ### Transactional.ensure_draft()
@@ -898,6 +945,22 @@ Ensure a transactional email has a draft email message. If a draft already exist
 response = LoopsSdk::Transactional.ensure_draft(transactional_id: "clfq6dinn000yl70fgwwyp82l")
 ```
 
+#### Response
+
+```json
+{
+  "id": "cll42l54f20i1la0lfooe3z12",
+  "name": "Sign up confirmation",
+  "draftEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "draftEmailMessageContentRevisionId": "clrev1s10n2i3d4e5f6g7h8",
+  "publishedEmailMessageId": null,
+  "transactionalGroupId": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "dataVariables": []
+}
+```
+
 ---
 
 ### Transactional.publish()
@@ -916,6 +979,21 @@ Publish a transactional email's current draft. The draft becomes the published v
 
 ```ruby
 response = LoopsSdk::Transactional.publish(transactional_id: "clfq6dinn000yl70fgwwyp82l")
+```
+
+#### Response
+
+```json
+{
+  "id": "cll42l54f20i1la0lfooe3z12",
+  "name": "Sign up confirmation",
+  "draftEmailMessageId": null,
+  "publishedEmailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+  "transactionalGroupId": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "dataVariables": []
+}
 ```
 
 ---
@@ -1060,6 +1138,31 @@ response = LoopsSdk::Themes.list
 response = LoopsSdk::Themes.list(perPage: 15, cursor: "cursor_value")
 ```
 
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "clo1z5q7s004yl70y3z4a5b6c",
+      "name": "Default",
+      "styles": { "backgroundColor": "#ffffff" },
+      "isDefault": true,
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z"
+    }
+  ]
+}
+```
+
 ---
 
 ### Themes.get()
@@ -1078,6 +1181,100 @@ Get a single theme by ID.
 
 ```ruby
 response = LoopsSdk::Themes.get(theme_id: "clo5p8q0r0132ntx6flkunw89")
+```
+
+#### Response
+
+```json
+{
+  "id": "clo1z5q7s004yl70y3z4a5b6c",
+  "name": "Default",
+  "styles": { "backgroundColor": "#ffffff" },
+  "isDefault": true,
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-01T00:00:00.000Z"
+}
+```
+
+---
+
+### Themes.create()
+
+Create a new email theme.
+
+[API Reference](https://loops.so/docs/api-reference/create-theme)
+
+#### Parameters
+
+| Name     | Type   | Required | Notes                                                                                              |
+| -------- | ------ | -------- | -------------------------------------------------------------------------------------------------- |
+| `name`   | string | Yes      |                                                                                                    |
+| `styles` | object | No       | Style attributes matching LMX `<Style />` tag attribute names. See the API reference for the full list. |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Themes.create(
+  name: "Dark mode",
+  styles: { backgroundColor: "#111827", bodyColor: "#1f2937" }
+)
+```
+
+#### Response
+
+```json
+{
+  "id": "clt3u5v7w9x1y3z5a7b9c1d3",
+  "name": "Dark mode",
+  "styles": {
+    "backgroundColor": "#111827",
+    "bodyColor": "#1f2937"
+  },
+  "isDefault": false,
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
+```
+
+---
+
+### Themes.update()
+
+Update a theme's name and/or styles. Style changes cascade to emails using the theme.
+
+[API Reference](https://loops.so/docs/api-reference/update-theme)
+
+#### Parameters
+
+| Name       | Type   | Required | Notes |
+| ---------- | ------ | -------- | ----- |
+| `theme_id` | string | Yes      |       |
+| `name`     | string | No       |       |
+| `styles`   | object | No       |       |
+
+At least one of `name` or `styles` must be provided.
+
+#### Example
+
+```ruby
+response = LoopsSdk::Themes.update(
+  theme_id: "clo5p8q0r0132ntx6flkunw89",
+  name: "Updated theme"
+)
+```
+
+#### Response
+
+```json
+{
+  "id": "clt3u5v7w9x1y3z5a7b9c1d3",
+  "name": "Updated theme",
+  "styles": { "backgroundColor": "#111827" },
+  "isDefault": false,
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "affectedEmailCount": 3
+}
 ```
 
 ---
@@ -1101,6 +1298,28 @@ List email components.
 response = LoopsSdk::Components.list
 ```
 
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "clp2a6r8t005yl70d7e8f9g0h",
+      "name": "Header",
+      "lmx": "<Paragraph>Welcome to Acme</Paragraph>"
+    }
+  ]
+}
+```
+
 ---
 
 ### Components.get()
@@ -1119,6 +1338,88 @@ Get a single component by ID.
 
 ```ruby
 response = LoopsSdk::Components.get(component_id: "clp6q9r1s0154ouy7gmlovx90")
+```
+
+#### Response
+
+```json
+{
+  "id": "clp2a6r8t005yl70d7e8f9g0h",
+  "name": "Header",
+  "lmx": "<Paragraph>Welcome to Acme</Paragraph>"
+}
+```
+
+---
+
+### Components.create()
+
+Create a new email component from an LMX body.
+
+[API Reference](https://loops.so/docs/api-reference/create-component)
+
+#### Parameters
+
+| Name   | Type   | Required | Notes                            |
+| ------ | ------ | -------- | -------------------------------- |
+| `name` | string | Yes      |                                  |
+| `lmx`  | string | Yes      | The component body as LMX.       |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Components.create(
+  name: "Header",
+  lmx: "<Paragraph>Welcome to Acme</Paragraph>"
+)
+```
+
+#### Response
+
+```json
+{
+  "id": "clp2a6r8t005yl70d7e8f9g0h",
+  "name": "Header",
+  "lmx": "<Paragraph>Welcome to Acme</Paragraph>"
+}
+```
+
+---
+
+### Components.update()
+
+Update a component's name and/or LMX body. Body changes cascade to emails using the component.
+
+[API Reference](https://loops.so/docs/api-reference/update-component)
+
+#### Parameters
+
+| Name           | Type   | Required | Notes |
+| -------------- | ------ | -------- | ----- |
+| `component_id` | string | Yes      |       |
+| `name`         | string | No       |       |
+| `lmx`          | string | No       |       |
+
+At least one of `name` or `lmx` must be provided.
+
+#### Example
+
+```ruby
+response = LoopsSdk::Components.update(
+  component_id: "clp6q9r1s0154ouy7gmlovx90",
+  name: "Updated Header"
+)
+```
+
+#### Response
+
+```json
+{
+  "id": "clp2a6r8t005yl70d7e8f9g0h",
+  "name": "Updated Header",
+  "lmx": "<Paragraph>Welcome to Acme</Paragraph>",
+  "affectedEmailCount": 2
+}
 ```
 
 ---
@@ -1140,6 +1441,36 @@ List campaigns.
 
 ```ruby
 response = LoopsSdk::Campaigns.list
+```
+
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "cln0y4p6r003yl70i1j2k3l4m",
+      "emailMessageId": "clm9x3o5q002yl70a8b3c4d5e",
+      "name": "Spring announcement",
+      "status": "Draft",
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "updatedAt": "2025-01-01T00:00:00.000Z",
+      "campaignGroupId": null,
+      "mailingListId": null,
+      "audienceSegmentId": null,
+      "audienceFilter": null,
+      "scheduling": { "method": "now", "timestamp": null }
+    }
+  ]
+}
 ```
 
 ---
@@ -1173,6 +1504,25 @@ response = LoopsSdk::Campaigns.create(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "cln0y4p6r003yl70i1j2k3l4m",
+  "name": "Spring announcement",
+  "status": "Draft",
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-01T00:00:00.000Z",
+  "emailMessageId": "clm9x3o5q002yl70a8b3c4d5e",
+  "emailMessageContentRevisionId": "clv8g2x4z012yl70n5o6p7q8r",
+  "campaignGroupId": null,
+  "mailingListId": null,
+  "audienceSegmentId": null,
+  "audienceFilter": null,
+  "scheduling": { "method": "now", "timestamp": null }
+}
+```
+
 ---
 
 ### Campaigns.get()
@@ -1191,6 +1541,24 @@ Get a single campaign by ID.
 
 ```ruby
 response = LoopsSdk::Campaigns.get(campaign_id: "cln4o7p9q0110msw5ekjtmv78")
+```
+
+#### Response
+
+```json
+{
+  "id": "cln0y4p6r003yl70i1j2k3l4m",
+  "name": "Spring announcement",
+  "status": "Draft",
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-01T00:00:00.000Z",
+  "emailMessageId": "clm9x3o5q002yl70a8b3c4d5e",
+  "campaignGroupId": null,
+  "mailingListId": null,
+  "audienceSegmentId": null,
+  "audienceFilter": null,
+  "scheduling": { "method": "now", "timestamp": null }
+}
 ```
 
 ---
@@ -1224,6 +1592,24 @@ response = LoopsSdk::Campaigns.update(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "cln0y4p6r003yl70i1j2k3l4m",
+  "name": "Updated campaign name",
+  "status": "Draft",
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-02T00:00:00.000Z",
+  "emailMessageId": "clm9x3o5q002yl70a8b3c4d5e",
+  "campaignGroupId": null,
+  "mailingListId": null,
+  "audienceSegmentId": null,
+  "audienceFilter": null,
+  "scheduling": { "method": "now", "timestamp": null }
+}
+```
+
 ---
 
 ### EmailMessages.get()
@@ -1242,6 +1628,24 @@ Get an email message, including its LMX content.
 
 ```ruby
 response = LoopsSdk::EmailMessages.get(email_message_id: "cly8k3m0n0044jpx2bghepq45")
+```
+
+#### Response
+
+```json
+{
+  "id": "clm9x3o5q002yl70a8b3c4d5e",
+  "campaignId": "cln0y4p6r003yl70i1j2k3l4m",
+  "subject": "Hello",
+  "previewText": "Preview text",
+  "fromName": "Loops",
+  "fromEmail": "hello",
+  "replyToEmail": "",
+  "emailFormat": "styled",
+  "lmx": "<H1>...</H1><Paragraph>...</Paragraph>",
+  "contentRevisionId": "clv8g2x4z012yl70n5o6p7q8r",
+  "updatedAt": "2025-01-01T00:00:00.000Z"
+}
 ```
 
 ---
@@ -1282,8 +1686,26 @@ response = LoopsSdk::EmailMessages.update(
   preview_text: "See what's new",
   from_name: "Loops",
   from_email: "hello",
-  lmx: "<Email><Style /></Email>"
+  lmx: "<Style /><Paragraph>...</Paragraph>"
 )
+```
+
+#### Response
+
+```json
+{
+  "id": "clm9x3o5q002yl70a8b3c4d5e",
+  "campaignId": "cln0y4p6r003yl70i1j2k3l4m",
+  "subject": "Spring announcement",
+  "previewText": "See what's new",
+  "fromName": "Loops",
+  "fromEmail": "hello",
+  "replyToEmail": "",
+  "emailFormat": "styled",
+  "lmx": "<Style /><Paragraph>...</Paragraph>",
+  "contentRevisionId": "clv8g2x4z013yl70s9t0u1v2w",
+  "updatedAt": "2025-01-02T00:00:00.000Z"
+}
 ```
 
 ---
@@ -1314,6 +1736,50 @@ response = LoopsSdk::EmailMessages.preview(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "cle5f7g9h1i3j5k7l9m1n3p5"
+}
+```
+
+---
+
+### EmailMessages.run_guardian()
+
+Run Guardian content validation on an email message and return errors and warnings.
+
+[API Reference](https://loops.so/docs/api-reference/run-guardian-checks)
+
+#### Parameters
+
+| Name               | Type   | Required | Notes |
+| ------------------ | ------ | -------- | ----- |
+| `email_message_id` | string | Yes      |       |
+
+#### Example
+
+```ruby
+response = LoopsSdk::EmailMessages.run_guardian(email_message_id: "cly8k3m0n0044jpx2bghepq45")
+```
+
+#### Response
+
+```json
+{
+  "errors": [
+    {
+      "rule": "missingButtonHrefs",
+      "title": "Missing button link",
+      "description": "Buttons won't work without href value",
+      "items": [{ "label": "Click here" }]
+    }
+  ],
+  "warnings": []
+}
+```
+
 ---
 
 ### CampaignGroups.list()
@@ -1333,6 +1799,30 @@ List campaign groups.
 
 ```ruby
 response = LoopsSdk::CampaignGroups.list
+```
+
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+      "name": "Newsletters",
+      "description": "Monthly product updates",
+      "createdAt": "2025-06-29T07:47:39.370Z",
+      "updatedAt": "2025-06-29T07:47:39.370Z"
+    }
+  ]
+}
 ```
 
 ---
@@ -1356,6 +1846,18 @@ Create a campaign group.
 response = LoopsSdk::CampaignGroups.create(name: "Newsletters", description: "Monthly updates")
 ```
 
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Newsletters",
+  "description": "Monthly updates",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
+```
+
 ---
 
 ### CampaignGroups.get()
@@ -1374,6 +1876,18 @@ Get a campaign group by ID.
 
 ```ruby
 response = LoopsSdk::CampaignGroups.get(campaign_group_id: "clq7r0s2t0176pvz8hnmpwy01")
+```
+
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Newsletters",
+  "description": "Monthly product updates",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
 ```
 
 ---
@@ -1403,6 +1917,18 @@ response = LoopsSdk::CampaignGroups.update(
 )
 ```
 
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Updated name",
+  "description": "Monthly product updates",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
+```
+
 ---
 
 ### AudienceSegments.list()
@@ -1424,6 +1950,36 @@ List audience segments.
 response = LoopsSdk::AudienceSegments.list
 ```
 
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "cls6e8g0i2k4m6o8q0s2u4w6",
+      "name": "Power users",
+      "description": "Contacts on the pro plan",
+      "createdAt": "2025-06-29T07:47:39.370Z",
+      "updatedAt": "2025-06-29T07:47:39.370Z",
+      "filter": {
+        "match": "all",
+        "conditions": [
+          { "type": "property", "key": "plan", "operator": "equals", "value": "pro" }
+        ]
+      }
+    }
+  ]
+}
+```
+
 ---
 
 ### AudienceSegments.get()
@@ -1442,6 +1998,72 @@ Get an audience segment by ID.
 
 ```ruby
 response = LoopsSdk::AudienceSegments.get(audience_segment_id: "clr8s1t3u0198qw09iotqzx12")
+```
+
+#### Response
+
+```json
+{
+  "id": "cls6e8g0i2k4m6o8q0s2u4w6",
+  "name": "Power users",
+  "description": "Contacts on the pro plan",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "filter": {
+    "match": "all",
+    "conditions": [
+      { "type": "property", "key": "plan", "operator": "equals", "value": "pro" }
+    ]
+  }
+}
+```
+
+---
+
+### AudienceSegments.create()
+
+Create a new audience segment.
+
+[API Reference](https://loops.so/docs/api-reference/create-audience-segment)
+
+#### Parameters
+
+| Name          | Type   | Required | Notes                                                                       |
+| ------------- | ------ | -------- | --------------------------------------------------------------------------- |
+| `name`        | string | Yes      | Must be unique within the team.                                             |
+| `filter`      | object | Yes      | JSON tree of audience conditions with `match` and `conditions`. See the [API reference](https://loops.so/docs/api-reference/create-audience-segment#body-filter). |
+| `description` | string | No       |                                                                             |
+
+#### Example
+
+```ruby
+response = LoopsSdk::AudienceSegments.create(
+  name: "Power users",
+  filter: {
+    match: "all",
+    conditions: [
+      { type: "property", key: "plan", operator: "equals", value: "pro" }
+    ]
+  }
+)
+```
+
+#### Response
+
+```json
+{
+  "id": "cls6e8g0i2k4m6o8q0s2u4w6",
+  "name": "Power users",
+  "description": null,
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z",
+  "filter": {
+    "match": "all",
+    "conditions": [
+      { "type": "property", "key": "plan", "operator": "equals", "value": "pro" }
+    ]
+  }
+}
 ```
 
 ---
@@ -1465,6 +2087,74 @@ List workflows.
 response = LoopsSdk::Workflows.list
 ```
 
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+      "name": "Onboarding",
+      "createdAt": "2025-06-29T07:47:39.370Z",
+      "updatedAt": "2025-06-29T07:47:39.370Z"
+    }
+  ]
+}
+```
+
+---
+
+### Workflows.create()
+
+Create a draft workflow with a blank trigger and exit node.
+
+[API Reference](https://loops.so/docs/api-reference/create-workflow)
+
+#### Parameters
+
+| Name              | Type   | Required | Notes                                          |
+| ----------------- | ------ | -------- | ---------------------------------------------- |
+| `name`            | string | Yes      |                                                |
+| `description`     | string | No       |                                                |
+| `mailing_list_id` | string | No       | The mailing list the workflow sends to.        |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Workflows.create(name: "Welcome series")
+```
+
+#### Response
+
+```json
+{
+  "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+  "status": "Draft",
+  "name": "Welcome series",
+  "mailingListId": null,
+  "rootNodeId": "cf16k73gq014h3mmj5b6jdi9r",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "nodes": {
+    "cf16k73gq014h3mmj5b6jdi9r": {
+      "typeName": "BlankTrigger",
+      "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"]
+    },
+    "cf16k73gq014h3mmj5b4jdifg": {
+      "typeName": "ExitAction",
+      "nextNodeIds": []
+    }
+  }
+}
+```
+
 ---
 
 ### Workflows.get()
@@ -1483,6 +2173,122 @@ Get a simplified workflow graph.
 
 ```ruby
 response = LoopsSdk::Workflows.get(workflow_id: "cls9t2u4v0210rx20jpuary23")
+```
+
+#### Response
+
+```json
+{
+  "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+  "status": "Draft",
+  "name": "Onboarding",
+  "mailingListId": null,
+  "rootNodeId": "cf16k73gq014h3mmj5b6jdi9r",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "nodes": {
+    "cf16k73gq014h3mmj5b6jdi9r": {
+      "typeName": "SignupTrigger",
+      "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"]
+    },
+    "cf16k73gq014h3mmj5b4jdifg": {
+      "typeName": "ExitAction",
+      "nextNodeIds": []
+    }
+  }
+}
+```
+
+---
+
+### Workflows.update()
+
+Update a workflow's display properties. To change the mailing list, use `Workflows.change_mailing_list()`.
+
+[API Reference](https://loops.so/docs/api-reference/update-workflow)
+
+#### Parameters
+
+| Name                     | Type   | Required | Notes                                                                                          |
+| ------------------------ | ------ | -------- | ---------------------------------------------------------------------------------------------- |
+| `workflow_id`            | string | Yes      |                                                                                                |
+| `expected_revision_id`   | string | Yes      | The `workflowRevisionId` from the latest read or mutation. Pass `nil` for older workflows.     |
+| `name`                   | string | No       |                                                                                                |
+| `description`            | string | No       |                                                                                                |
+
+At least one of `name` or `description` must be provided.
+
+#### Example
+
+```ruby
+response = LoopsSdk::Workflows.update(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  expected_revision_id: "rev_123",
+  name: "Updated name"
+)
+```
+
+#### Response
+
+```json
+{
+  "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+  "status": "Draft",
+  "name": "Updated name",
+  "mailingListId": null,
+  "rootNodeId": "cf16k73gq014h3mmj5b6jdi9r",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "nodes": {
+    "cf16k73gq014h3mmj5b6jdi9r": {
+      "typeName": "BlankTrigger",
+      "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"]
+    },
+    "cf16k73gq014h3mmj5b4jdifg": {
+      "typeName": "ExitAction",
+      "nextNodeIds": []
+    }
+  }
+}
+```
+
+---
+
+### Workflows.change_mailing_list()
+
+Dry run or apply a workflow mailing list change. If queued contacts would be removed, the API returns `"status": "queuedContactsFound"` — retry with `queued_contact_policy: "discard"` to apply.
+
+[API Reference](https://loops.so/docs/api-reference/change-workflow-mailing-list)
+
+#### Parameters
+
+| Name                     | Type    | Required | Notes                                                                 |
+| ------------------------ | ------- | -------- | --------------------------------------------------------------------- |
+| `workflow_id`            | string  | Yes      |                                                                       |
+| `expected_revision_id`   | string  | Yes      | Pass `nil` for older workflows.                                       |
+| `mailing_list_id`        | string  | Yes      | Pass `nil` to clear the mailing list.                                 |
+| `dry_run`                | boolean | No       | If `true`, validate without modifying.                                |
+| `queued_contact_policy`  | string  | No       | `fail` (default) or `discard`.                                        |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Workflows.change_mailing_list(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  expected_revision_id: "rev_123",
+  mailing_list_id: "cm06f5v0e45nf0ml5754o9cix",
+  dry_run: true
+)
+```
+
+#### Response
+
+```json
+{
+  "status": "updated",
+  "mailingListId": "cm06f5v0e45nf0ml5754o9cix",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "queuedContactCount": 0,
+  "queuedContactLimitReached": false
+}
 ```
 
 ---
@@ -1506,6 +2312,388 @@ Get detailed data for a single workflow node.
 response = LoopsSdk::Workflows.get_node(workflow_id: "cls9t2u4v0210rx20jpuary23", node_id: "clt0u3v5w0232sy31kqvbzs34")
 ```
 
+#### Response
+
+```json
+{
+  "id": "cln8p0q2r4s6t8u0v2w4x6z8",
+  "workflowId": "clw1a3b5c7d9e1f3g5h7i9j1",
+  "typeName": "TimerAction",
+  "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"],
+  "amount": 1,
+  "unit": "h",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6"
+}
+```
+
+---
+
+### Workflows.create_node()
+
+Create a new default workflow node. Use `insert_mode: "between"` with `from_node_id`/`to_node_id`, or `insert_mode: "before"` with `before_node_id`.
+
+[API Reference](https://loops.so/docs/api-reference/create-workflow-node)
+
+#### Parameters
+
+| Name                   | Type   | Required | Notes                                                                                          |
+| ---------------------- | ------ | -------- | ---------------------------------------------------------------------------------------------- |
+| `workflow_id`          | string | Yes      |                                                                                                |
+| `expected_revision_id` | string | Yes      | Pass `nil` for older workflows.                                                                |
+| `insert_mode`          | string | Yes      | `between` or `before`.                                                                         |
+| `node_type_name`       | string | Yes      | One of `AudienceFilter`, `BranchNode`, `ExperimentBranchNode`, `TimerAction`, `SendEmailAction`, `VariantNode`. |
+| `from_node_id`         | string | No       | Required when `insert_mode` is `between`.                                                      |
+| `to_node_id`           | string | No       | Required when `insert_mode` is `between`.                                                      |
+| `before_node_id`       | string | No       | Required when `insert_mode` is `before`.                                                       |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Workflows.create_node(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  expected_revision_id: "rev_123",
+  insert_mode: "between",
+  node_type_name: "TimerAction",
+  from_node_id: "node_a",
+  to_node_id: "node_b"
+)
+```
+
+#### Response
+
+```json
+{
+  "node": {
+    "id": "cln8p0q2r4s6t8u0v2w4x6z8",
+    "typeName": "TimerAction",
+    "nextNodeIds": ["node_b"],
+    "amount": 0,
+    "unit": "m",
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6"
+  },
+  "workflow": {
+    "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+    "status": "Draft",
+    "name": "Welcome series",
+    "mailingListId": null,
+    "rootNodeId": "node_a",
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+    "nodes": {
+      "node_a": {
+        "typeName": "BlankTrigger",
+        "nextNodeIds": ["cln8p0q2r4s6t8u0v2w4x6z8"]
+      },
+      "cln8p0q2r4s6t8u0v2w4x6z8": {
+        "typeName": "TimerAction",
+        "nextNodeIds": ["node_b"],
+        "amount": 0,
+        "unit": "m"
+      },
+      "node_b": {
+        "typeName": "ExitAction",
+        "nextNodeIds": []
+      }
+    }
+  }
+}
+```
+
+---
+
+### Workflows.update_node()
+
+Update workflow-node-owned fields for a single node.
+
+[API Reference](https://loops.so/docs/api-reference/update-workflow-node)
+
+#### Parameters
+
+| Name                   | Type   | Required | Notes                                                      |
+| ---------------------- | ------ | -------- | ---------------------------------------------------------- |
+| `workflow_id`          | string | Yes      |                                                            |
+| `node_id`              | string | Yes      |                                                            |
+| `expected_revision_id` | string | Yes      | Pass `nil` for older workflows.                            |
+| `payload`              | object | Yes      | Node-type-specific fields. See the API reference.          |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Workflows.update_node(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  node_id: "clt0u3v5w0232sy31kqvbzs34",
+  expected_revision_id: "rev_123",
+  payload: { amount: 2, unit: "d" }
+)
+```
+
+#### Response
+
+```json
+{
+  "id": "cln8p0q2r4s6t8u0v2w4x6z8",
+  "workflowId": "clw1a3b5c7d9e1f3g5h7i9j1",
+  "typeName": "TimerAction",
+  "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"],
+  "amount": 2,
+  "unit": "d",
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6"
+}
+```
+
+---
+
+### Workflows.delete_node()
+
+Delete a single workflow node. If contacts are queued, the API returns `"status": "queuedContactsFound"` — retry with `queued_contact_policy: "discard"` to delete.
+
+[API Reference](https://loops.so/docs/api-reference/delete-workflow-node)
+
+#### Parameters
+
+| Name                    | Type    | Required | Notes                          |
+| ----------------------- | ------- | -------- | ------------------------------ |
+| `workflow_id`           | string  | Yes      |                                |
+| `node_id`               | string  | Yes      |                                |
+| `expected_revision_id`  | string  | Yes      | Pass `nil` for older workflows.|
+| `dry_run`               | boolean | No       |                                |
+| `queued_contact_policy` | string  | No       | `fail` (default) or `discard`. |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Workflows.delete_node(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  node_id: "clt0u3v5w0232sy31kqvbzs34",
+  expected_revision_id: "rev_123",
+  dry_run: true
+)
+```
+
+#### Response
+
+```json
+{
+  "status": "deleted",
+  "nodeIds": ["clt0u3v5w0232sy31kqvbzs34"],
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "queuedContactCount": 0,
+  "queuedContactLimitReached": false
+}
+```
+
+---
+
+### Workflows.add_branch()
+
+Add a branch and child node under an existing `BranchNode` or `ExperimentBranchNode`.
+
+[API Reference](https://loops.so/docs/api-reference/add-workflow-branch)
+
+#### Parameters
+
+| Name                   | Type   | Required | Notes                           |
+| ---------------------- | ------ | -------- | ------------------------------- |
+| `workflow_id`          | string | Yes      |                                 |
+| `node_id`              | string | Yes      | The branch or experiment node.  |
+| `expected_revision_id` | string | Yes      | Pass `nil` for older workflows. |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Workflows.add_branch(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  node_id: "clt0u3v5w0232sy31kqvbzs34",
+  expected_revision_id: "rev_123"
+)
+```
+
+#### Response
+
+```json
+{
+  "node": {
+    "id": "cln0a2b4c6d8e0f2g4h6i8j0",
+    "typeName": "AudienceFilter",
+    "nextNodeIds": [],
+    "appliesDownstream": false,
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6"
+  },
+  "workflow": {
+    "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+    "status": "Draft",
+    "name": "Welcome series",
+    "mailingListId": null,
+    "rootNodeId": "clt0u3v5w0232sy31kqvbzs34",
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+    "nodes": {
+      "clt0u3v5w0232sy31kqvbzs34": {
+        "typeName": "BranchNode",
+        "nextNodeIds": ["cln0a2b4c6d8e0f2g4h6i8j0"]
+      },
+      "cln0a2b4c6d8e0f2g4h6i8j0": {
+        "typeName": "AudienceFilter",
+        "nextNodeIds": []
+      }
+    }
+  }
+}
+```
+
+---
+
+### Workflows.delete_node_recursive()
+
+Delete a node and its downstream subtree.
+
+[API Reference](https://loops.so/docs/api-reference/delete-workflow-nodes)
+
+#### Parameters
+
+| Name                    | Type    | Required | Notes                          |
+| ----------------------- | ------- | -------- | ------------------------------ |
+| `workflow_id`           | string  | Yes      |                                |
+| `node_id`               | string  | Yes      | Root of the subtree to delete. |
+| `expected_revision_id`  | string  | Yes      | Pass `nil` for older workflows.|
+| `dry_run`               | boolean | No       |                                |
+| `queued_contact_policy` | string  | No       | `fail` (default) or `discard`. |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Workflows.delete_node_recursive(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  node_id: "clt0u3v5w0232sy31kqvbzs34",
+  expected_revision_id: "rev_123",
+  queued_contact_policy: "discard"
+)
+```
+
+#### Response
+
+```json
+{
+  "status": "deleted",
+  "nodeIds": [
+    "clt0u3v5w0232sy31kqvbzs34",
+    "cln9q1r3s5t7u9v1w3x5y7z9"
+  ],
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "queuedContactCount": 0,
+  "queuedContactLimitReached": false
+}
+```
+
+---
+
+### EventPatterns.list()
+
+List event patterns available to workflow event trigger nodes.
+
+[API Reference](https://loops.so/docs/api-reference/list-event-patterns)
+
+#### Parameters
+
+| Name      | Type    | Required | Notes                                                                                                                         |
+| --------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `perPage` | integer | No       | How many results to return per page. Must be between 10 and 50. Defaults to 20 if omitted.                                    |
+| `cursor`  | string  | No       | A cursor, to return a specific page of results. Cursors can be found from the `pagination.nextCursor` value in each response. |
+
+#### Example
+
+```ruby
+response = LoopsSdk::EventPatterns.list
+```
+
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "cle1a2b3c004yl70d5e6f7g8h",
+      "eventName": "signup",
+      "incomingWebhookPlatform": null
+    }
+  ]
+}
+```
+
+---
+
+### EventPatterns.get()
+
+Get an event pattern by ID.
+
+[API Reference](https://loops.so/docs/api-reference/get-event-pattern)
+
+#### Parameters
+
+| Name               | Type   | Required | Notes |
+| ------------------ | ------ | -------- | ----- |
+| `event_pattern_id` | string | Yes      |       |
+
+#### Example
+
+```ruby
+response = LoopsSdk::EventPatterns.get(event_pattern_id: "cle1v2e3n4t5p6a7t8t9e0r1")
+```
+
+#### Response
+
+```json
+{
+  "id": "cle1a2b3c004yl70d5e6f7g8h",
+  "eventName": "signup",
+  "eventProperties": [
+    { "name": "plan", "type": "string" },
+    { "name": "trialDays", "type": "number" }
+  ],
+  "incomingWebhookPlatform": null
+}
+```
+
+---
+
+### EventPatterns.get_by_name()
+
+Get an event pattern by event name. Event names are case-sensitive.
+
+[API Reference](https://loops.so/docs/api-reference/get-event-pattern-by-name)
+
+#### Parameters
+
+| Name         | Type   | Required | Notes |
+| ------------ | ------ | -------- | ----- |
+| `event_name` | string | Yes      |       |
+
+#### Example
+
+```ruby
+response = LoopsSdk::EventPatterns.get_by_name(event_name: "signup")
+```
+
+#### Response
+
+```json
+{
+  "id": "cle1a2b3c004yl70d5e6f7g8h",
+  "eventName": "signup",
+  "eventProperties": [
+    { "name": "plan", "type": "string" },
+    { "name": "trialDays", "type": "number" }
+  ],
+  "incomingWebhookPlatform": null
+}
+```
+
 ---
 
 ### TransactionalGroups.list()
@@ -1525,6 +2713,30 @@ List transactional groups.
 
 ```ruby
 response = LoopsSdk::TransactionalGroups.list
+```
+
+#### Response
+
+```json
+{
+  "pagination": {
+    "totalResults": 1,
+    "returnedResults": 1,
+    "perPage": 20,
+    "totalPages": 1,
+    "nextCursor": null,
+    "nextPage": null
+  },
+  "data": [
+    {
+      "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+      "name": "Onboarding",
+      "description": "Top of funnel campaigns",
+      "createdAt": "2025-06-29T07:47:39.370Z",
+      "updatedAt": "2025-06-29T07:47:39.370Z"
+    }
+  ]
+}
 ```
 
 ---
@@ -1548,6 +2760,18 @@ Create a transactional group.
 response = LoopsSdk::TransactionalGroups.create(name: "Account emails")
 ```
 
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Account emails",
+  "description": "",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
+```
+
 ---
 
 ### TransactionalGroups.get()
@@ -1566,6 +2790,18 @@ Get a transactional group by ID.
 
 ```ruby
 response = LoopsSdk::TransactionalGroups.get(transactional_group_id: "clv2w3x4y0288xbb0kqrsuv67")
+```
+
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Account emails",
+  "description": "",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
 ```
 
 ---
@@ -1593,6 +2829,18 @@ response = LoopsSdk::TransactionalGroups.update(
   transactional_group_id: "clv2w3x4y0288xbb0kqrsuv67",
   name: "Updated name"
 )
+```
+
+#### Response
+
+```json
+{
+  "id": "clg7n5p3q1r9s7t5u3v1w9y7",
+  "name": "Updated name",
+  "description": "",
+  "createdAt": "2025-06-29T07:47:39.370Z",
+  "updatedAt": "2025-06-29T07:47:39.370Z"
+}
 ```
 
 ---

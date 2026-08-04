@@ -126,4 +126,24 @@ RSpec.describe LoopsSdk::EmailMessages do
       expect(result).to eq({ "id" => "cly8k3m0n0044jpx2bghepq45" })
     end
   end
+
+  describe ".run_guardian" do
+    it "makes a GET request to run Guardian checks" do
+      expect(connection).to receive(:send).with(:get) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with("v1/email-messages/cly8k3m0n0044jpx2bghepq45/guardian")
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=).with(nil)
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"errors":[],"warnings":[]}')
+
+      result = described_class.run_guardian(email_message_id: "cly8k3m0n0044jpx2bghepq45")
+      expect(result).to eq({ "errors" => [], "warnings" => [] })
+    end
+  end
 end

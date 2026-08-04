@@ -1,3 +1,13 @@
+## v2.4.0 - Aug 3, 2026
+
+- Added theme mutation endpoints: `Themes.create()` and `Themes.update()`.
+- Added component mutation endpoints: `Components.create()` and `Components.update()`.
+- Added `AudienceSegments.create()`.
+- Added `EmailMessages.run_guardian()` for Guardian content validation.
+- Added event pattern endpoints: `EventPatterns.list()`, `.get()`, and `.get_by_name()`.
+- Added workflow mutation endpoints: `Workflows.create()`, `.update()`, and `.change_mailing_list()`.
+- Added workflow node endpoints: `Workflows.create_node()`, `.update_node()`, `.delete_node()`, `.add_branch()`, and `.delete_node_recursive()`.
+
 ## v2.3.0 - Jun 24, 2026
 
 - Added `Uploads.upload()` to upload an image.
