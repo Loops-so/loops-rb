@@ -1,3 +1,9 @@
+## v2.5.0 - Aug 7, 2026
+
+- Added `Workflows.reroute_node()` to reroute a node's outgoing connection to another target.
+- `Workflows.create_node()` now accepts `insert_mode: after`, and prefers `to_node_id` over now-deprecated `before_node_id` for `before`.
+- Updated workflow mutation response examples: mailing-list changes, node updates, and node deletes now include the latest `workflow`; `queuedContactLimitReached` has been removed.
+
 ## v2.4.0 - Aug 3, 2026
 
 - Added theme mutation endpoints: `Themes.create()` and `Themes.update()`.

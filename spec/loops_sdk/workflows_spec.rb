@@ -179,6 +179,167 @@ RSpec.describe LoopsSdk::Workflows do
       )
       expect(result).to eq({ "node" => { "id" => "node_c" } })
     end
+
+    it "makes a POST request to insert a node after another node" do
+      expected_body = {
+        expectedRevisionId: "rev_123",
+        insertMode: "after",
+        nodeTypeName: "TimerAction",
+        fromNodeId: "node_a"
+      }
+
+      expect(connection).to receive(:send).with(:post) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with("v1/workflows/cls9t2u4v0210rx20jpuary23/nodes")
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=) do |body|
+          expect(JSON.parse(body)).to eq(JSON.parse(expected_body.to_json))
+        end
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"node":{"id":"node_c"}}')
+
+      result = described_class.create_node(
+        workflow_id: "cls9t2u4v0210rx20jpuary23",
+        expected_revision_id: "rev_123",
+        insert_mode: "after",
+        node_type_name: "TimerAction",
+        from_node_id: "node_a"
+      )
+      expect(result).to eq({ "node" => { "id" => "node_c" } })
+    end
+
+    it "makes a POST request to insert a node before another node using to_node_id" do
+      expected_body = {
+        expectedRevisionId: "rev_123",
+        insertMode: "before",
+        nodeTypeName: "TimerAction",
+        toNodeId: "node_b"
+      }
+
+      expect(connection).to receive(:send).with(:post) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with("v1/workflows/cls9t2u4v0210rx20jpuary23/nodes")
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=) do |body|
+          expect(JSON.parse(body)).to eq(JSON.parse(expected_body.to_json))
+        end
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"node":{"id":"node_c"}}')
+
+      result = described_class.create_node(
+        workflow_id: "cls9t2u4v0210rx20jpuary23",
+        expected_revision_id: "rev_123",
+        insert_mode: "before",
+        node_type_name: "TimerAction",
+        to_node_id: "node_b"
+      )
+      expect(result).to eq({ "node" => { "id" => "node_c" } })
+    end
+
+    it "makes a POST request to insert a node before another node using before_node_id" do
+      expected_body = {
+        expectedRevisionId: "rev_123",
+        insertMode: "before",
+        nodeTypeName: "TimerAction",
+        beforeNodeId: "node_b"
+      }
+
+      expect(connection).to receive(:send).with(:post) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with("v1/workflows/cls9t2u4v0210rx20jpuary23/nodes")
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=) do |body|
+          expect(JSON.parse(body)).to eq(JSON.parse(expected_body.to_json))
+        end
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"node":{"id":"node_c"}}')
+
+      result = described_class.create_node(
+        workflow_id: "cls9t2u4v0210rx20jpuary23",
+        expected_revision_id: "rev_123",
+        insert_mode: "before",
+        node_type_name: "TimerAction",
+        before_node_id: "node_b"
+      )
+      expect(result).to eq({ "node" => { "id" => "node_c" } })
+    end
+
+    it "raises when required node IDs are missing for between" do
+      expect {
+        described_class.create_node(
+          workflow_id: "cls9t2u4v0210rx20jpuary23",
+          expected_revision_id: "rev_123",
+          insert_mode: "between",
+          node_type_name: "TimerAction",
+          from_node_id: "node_a"
+        )
+      }.to raise_error(ArgumentError, 'from_node_id and to_node_id are required when insert_mode is "between".')
+    end
+
+    it "raises when from_node_id is provided for before" do
+      expect {
+        described_class.create_node(
+          workflow_id: "cls9t2u4v0210rx20jpuary23",
+          expected_revision_id: "rev_123",
+          insert_mode: "before",
+          node_type_name: "TimerAction",
+          from_node_id: "node_a",
+          to_node_id: "node_b"
+        )
+      }.to raise_error(ArgumentError, 'from_node_id is not permitted when insert_mode is "before".')
+    end
+
+    it "raises when both to_node_id and before_node_id are provided for before" do
+      expect {
+        described_class.create_node(
+          workflow_id: "cls9t2u4v0210rx20jpuary23",
+          expected_revision_id: "rev_123",
+          insert_mode: "before",
+          node_type_name: "TimerAction",
+          to_node_id: "node_b",
+          before_node_id: "node_b"
+        )
+      }.to raise_error(ArgumentError, 'Provide either to_node_id or before_node_id when insert_mode is "before", not both.')
+    end
+
+    it "raises when to_node_id is provided for after" do
+      expect {
+        described_class.create_node(
+          workflow_id: "cls9t2u4v0210rx20jpuary23",
+          expected_revision_id: "rev_123",
+          insert_mode: "after",
+          node_type_name: "TimerAction",
+          from_node_id: "node_a",
+          to_node_id: "node_b"
+        )
+      }.to raise_error(ArgumentError, 'to_node_id is not permitted when insert_mode is "after".')
+    end
+
+    it "raises for an unknown insert_mode" do
+      expect {
+        described_class.create_node(
+          workflow_id: "cls9t2u4v0210rx20jpuary23",
+          expected_revision_id: "rev_123",
+          insert_mode: "around",
+          node_type_name: "TimerAction"
+        )
+      }.to raise_error(ArgumentError, 'insert_mode must be "between", "before", or "after".')
+    end
   end
 
   describe ".update_node" do
@@ -266,6 +427,38 @@ RSpec.describe LoopsSdk::Workflows do
         expected_revision_id: "rev_123"
       )
       expect(result).to eq({ "node" => { "id" => "branch_child" } })
+    end
+  end
+
+  describe ".reroute_node" do
+    it "makes a POST request to reroute a node connection" do
+      expected_body = {
+        expectedRevisionId: "rev_123",
+        newTargetNodeId: "cln3c5d7e9f1g3h5i7j9k1l3"
+      }
+
+      expect(connection).to receive(:send).with(:post) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with("v1/workflows/cls9t2u4v0210rx20jpuary23/nodes/clt0u3v5w0232sy31kqvbzs34/reroute")
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=) do |body|
+          expect(JSON.parse(body)).to eq(JSON.parse(expected_body.to_json))
+        end
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(200)
+      allow(response).to receive(:body).and_return('{"id":"clt0u3v5w0232sy31kqvbzs34","workflowRevisionId":"rev_124"}')
+
+      result = described_class.reroute_node(
+        workflow_id: "cls9t2u4v0210rx20jpuary23",
+        node_id: "clt0u3v5w0232sy31kqvbzs34",
+        expected_revision_id: "rev_123",
+        new_target_node_id: "cln3c5d7e9f1g3h5i7j9k1l3"
+      )
+      expect(result).to eq({ "id" => "clt0u3v5w0232sy31kqvbzs34", "workflowRevisionId" => "rev_124" })
     end
   end
 
