@@ -31,6 +31,16 @@ module LoopsSdk
         make_request(method: :post, path: "v1/workflows/#{workflow_id}", body: body)
       end
 
+      def delete(workflow_id:, expected_revision_id:, confirm_delete: nil)
+        body = {
+          expectedRevisionId: expected_revision_id,
+          confirmDelete: confirm_delete
+        }.compact
+        # expectedRevisionId may be null for older workflows; always include it
+        body[:expectedRevisionId] = expected_revision_id
+        make_request(method: :delete, path: "v1/workflows/#{workflow_id}", body: body)
+      end
+
       def change_mailing_list(workflow_id:, expected_revision_id:, mailing_list_id:, dry_run: nil, queued_contact_policy: nil)
         body = {
           expectedRevisionId: expected_revision_id,

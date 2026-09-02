@@ -145,6 +145,7 @@ You can use custom contact properties in API calls. Please make sure to [add cus
 - [Workflows.create()](#workflowscreate)
 - [Workflows.get()](#workflowsget)
 - [Workflows.update()](#workflowsupdate)
+- [Workflows.delete()](#workflowsdelete)
 - [Workflows.change_mailing_list()](#workflowschange_mailing_list)
 - [Workflows.get_node()](#workflowsget_node)
 - [Workflows.create_node()](#workflowscreate_node)
@@ -2250,6 +2251,42 @@ response = LoopsSdk::Workflows.update(
   }
 }
 ```
+
+---
+
+### Workflows.delete()
+
+Delete a workflow. Successful deletion returns no content (`nil`). If the workflow is currently sending or has queued contacts, the API returns `409 Conflict` — retry with `confirm_delete: true` to delete the workflow, stop sending, and cancel queued contacts.
+
+[API Reference](https://loops.so/docs/api-reference/delete-workflow)
+
+#### Parameters
+
+| Name                   | Type    | Required | Notes                                                                                          |
+| ---------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------- |
+| `workflow_id`          | string  | Yes      |                                                                                                |
+| `expected_revision_id` | string  | Yes      | The `workflowRevisionId` from the latest read or mutation. Pass `nil` for older workflows.     |
+| `confirm_delete`       | boolean | No       | Set to `true` after a confirmation-required `409` to confirm deleting a sending workflow or a workflow with queued contacts. |
+
+#### Example
+
+```ruby
+LoopsSdk::Workflows.delete(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  expected_revision_id: "rev_123"
+)
+
+# After a 409 confirming a sending or queued workflow:
+LoopsSdk::Workflows.delete(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  expected_revision_id: "rev_123",
+  confirm_delete: true
+)
+```
+
+#### Response
+
+`nil` (HTTP `204 No Content`)
 
 ---
 

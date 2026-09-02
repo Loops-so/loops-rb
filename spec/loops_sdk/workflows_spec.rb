@@ -91,6 +91,86 @@ RSpec.describe LoopsSdk::Workflows do
     end
   end
 
+  describe ".delete" do
+    it "makes a DELETE request to delete a workflow" do
+      expected_body = {
+        expectedRevisionId: "rev_123"
+      }
+
+      expect(connection).to receive(:send).with(:delete) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with("v1/workflows/cls9t2u4v0210rx20jpuary23")
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=) do |body|
+          expect(JSON.parse(body)).to eq(JSON.parse(expected_body.to_json))
+        end
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(204)
+      allow(response).to receive(:body).and_return("")
+
+      result = described_class.delete(
+        workflow_id: "cls9t2u4v0210rx20jpuary23",
+        expected_revision_id: "rev_123"
+      )
+      expect(result).to be_nil
+    end
+
+    it "includes confirmDelete when confirming a sending or queued workflow" do
+      expected_body = {
+        expectedRevisionId: "rev_123",
+        confirmDelete: true
+      }
+
+      expect(connection).to receive(:send).with(:delete) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with("v1/workflows/cls9t2u4v0210rx20jpuary23")
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=) do |body|
+          expect(JSON.parse(body)).to eq(JSON.parse(expected_body.to_json))
+        end
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(204)
+      allow(response).to receive(:body).and_return("")
+
+      result = described_class.delete(
+        workflow_id: "cls9t2u4v0210rx20jpuary23",
+        expected_revision_id: "rev_123",
+        confirm_delete: true
+      )
+      expect(result).to be_nil
+    end
+
+    it "includes a null expectedRevisionId when provided" do
+      expect(connection).to receive(:send).with(:delete) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with("v1/workflows/cls9t2u4v0210rx20jpuary23")
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=) do |body|
+          expect(JSON.parse(body)).to eq({ "expectedRevisionId" => nil })
+        end
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(204)
+      allow(response).to receive(:body).and_return("")
+
+      described_class.delete(
+        workflow_id: "cls9t2u4v0210rx20jpuary23",
+        expected_revision_id: nil
+      )
+    end
+  end
+
   describe ".change_mailing_list" do
     it "makes a POST request to change the mailing list" do
       expected_body = {
