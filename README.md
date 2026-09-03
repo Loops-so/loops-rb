@@ -145,12 +145,14 @@ You can use custom contact properties in API calls. Please make sure to [add cus
 - [Workflows.create()](#workflowscreate)
 - [Workflows.get()](#workflowsget)
 - [Workflows.update()](#workflowsupdate)
+- [Workflows.delete()](#workflowsdelete)
 - [Workflows.change_mailing_list()](#workflowschange_mailing_list)
 - [Workflows.get_node()](#workflowsget_node)
 - [Workflows.create_node()](#workflowscreate_node)
 - [Workflows.update_node()](#workflowsupdate_node)
 - [Workflows.delete_node()](#workflowsdelete_node)
 - [Workflows.add_branch()](#workflowsadd_branch)
+- [Workflows.reroute_node()](#workflowsreroute_node)
 - [Workflows.delete_node_recursive()](#workflowsdelete_node_recursive)
 - [EventPatterns.list()](#eventpatternslist)
 - [EventPatterns.get()](#eventpatternsget)
@@ -2252,6 +2254,42 @@ response = LoopsSdk::Workflows.update(
 
 ---
 
+### Workflows.delete()
+
+Delete a workflow. Successful deletion returns no content (`nil`). If the workflow is currently sending or has queued contacts, the API returns `409 Conflict` — retry with `confirm_delete: true` to delete the workflow, stop sending, and cancel queued contacts.
+
+[API Reference](https://loops.so/docs/api-reference/delete-workflow)
+
+#### Parameters
+
+| Name                   | Type    | Required | Notes                                                                                          |
+| ---------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------- |
+| `workflow_id`          | string  | Yes      |                                                                                                |
+| `expected_revision_id` | string  | Yes      | The `workflowRevisionId` from the latest read or mutation. Pass `nil` for older workflows.     |
+| `confirm_delete`       | boolean | No       | Set to `true` after a confirmation-required `409` to confirm deleting a sending workflow or a workflow with queued contacts. |
+
+#### Example
+
+```ruby
+LoopsSdk::Workflows.delete(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  expected_revision_id: "rev_123"
+)
+
+# After a 409 confirming a sending or queued workflow:
+LoopsSdk::Workflows.delete(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  expected_revision_id: "rev_123",
+  confirm_delete: true
+)
+```
+
+#### Response
+
+`nil` (HTTP `204 No Content`)
+
+---
+
 ### Workflows.change_mailing_list()
 
 Dry run or apply a workflow mailing list change. If queued contacts would be removed, the API returns `"status": "queuedContactsFound"` — retry with `queued_contact_policy: "discard"` to apply.
@@ -2287,7 +2325,24 @@ response = LoopsSdk::Workflows.change_mailing_list(
   "mailingListId": "cm06f5v0e45nf0ml5754o9cix",
   "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
   "queuedContactCount": 0,
-  "queuedContactLimitReached": false
+  "workflow": {
+    "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+    "status": "Draft",
+    "name": "Welcome series",
+    "mailingListId": "cm06f5v0e45nf0ml5754o9cix",
+    "rootNodeId": "cln8p0q2r4s6t8u0v2w4x6z8",
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+    "nodes": {
+      "cln8p0q2r4s6t8u0v2w4x6z8": {
+        "typeName": "BlankTrigger",
+        "nextNodeIds": ["cln1a3b5c7d9e1f3g5h7i9j1"]
+      },
+      "cln1a3b5c7d9e1f3g5h7i9j1": {
+        "typeName": "ExitAction",
+        "nextNodeIds": []
+      }
+    }
+  }
 }
 ```
 
@@ -2330,7 +2385,12 @@ response = LoopsSdk::Workflows.get_node(workflow_id: "cls9t2u4v0210rx20jpuary23"
 
 ### Workflows.create_node()
 
-Create a new default workflow node. Use `insert_mode: "between"` with `from_node_id`/`to_node_id`, or `insert_mode: "before"` with `before_node_id`.
+Create a new default workflow node.
+
+Use `insert_mode` to choose placement:
+- `between` — insert between `from_node_id` and `to_node_id`
+- `before` — insert before `to_node_id`
+- `after` — insert after `from_node_id` (source must have exactly one outgoing connection)
 
 [API Reference](https://loops.so/docs/api-reference/create-workflow-node)
 
@@ -2340,11 +2400,11 @@ Create a new default workflow node. Use `insert_mode: "between"` with `from_node
 | ---------------------- | ------ | -------- | ---------------------------------------------------------------------------------------------- |
 | `workflow_id`          | string | Yes      |                                                                                                |
 | `expected_revision_id` | string | Yes      | Pass `nil` for older workflows.                                                                |
-| `insert_mode`          | string | Yes      | `between` or `before`.                                                                         |
+| `insert_mode`          | string | Yes      | `between`, `before`, or `after`.                                                               |
 | `node_type_name`       | string | Yes      | One of `AudienceFilter`, `BranchNode`, `ExperimentBranchNode`, `TimerAction`, `SendEmailAction`, `VariantNode`. |
-| `from_node_id`         | string | No       | Required when `insert_mode` is `between`.                                                      |
-| `to_node_id`           | string | No       | Required when `insert_mode` is `between`.                                                      |
-| `before_node_id`       | string | No       | Required when `insert_mode` is `before`.                                                       |
+| `from_node_id`         | string | Cond.    | Required for `between` and `after`. Not permitted for `before`.                                |
+| `to_node_id`           | string | Cond.    | Required for `between`. For `before`, provide this or `before_node_id` (not both). Not permitted for `after`. |
+| `before_node_id`       | string | Cond.    | Deprecated. For `before`, provide this or `to_node_id` (not both).                             |
 
 #### Example
 
@@ -2355,6 +2415,22 @@ response = LoopsSdk::Workflows.create_node(
   insert_mode: "between",
   node_type_name: "TimerAction",
   from_node_id: "node_a",
+  to_node_id: "node_b"
+)
+
+response = LoopsSdk::Workflows.create_node(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  expected_revision_id: "rev_123",
+  insert_mode: "after",
+  node_type_name: "TimerAction",
+  from_node_id: "node_a"
+)
+
+response = LoopsSdk::Workflows.create_node(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  expected_revision_id: "rev_123",
+  insert_mode: "before",
+  node_type_name: "TimerAction",
   to_node_id: "node_b"
 )
 ```
@@ -2436,7 +2512,27 @@ response = LoopsSdk::Workflows.update_node(
   "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"],
   "amount": 2,
   "unit": "d",
-  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6"
+  "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+  "workflow": {
+    "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+    "status": "Draft",
+    "name": "Welcome series",
+    "mailingListId": null,
+    "rootNodeId": "cln8p0q2r4s6t8u0v2w4x6z8",
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+    "nodes": {
+      "cln8p0q2r4s6t8u0v2w4x6z8": {
+        "typeName": "TimerAction",
+        "nextNodeIds": ["cf16k73gq014h3mmj5b4jdifg"],
+        "amount": 2,
+        "unit": "d"
+      },
+      "cf16k73gq014h3mmj5b4jdifg": {
+        "typeName": "ExitAction",
+        "nextNodeIds": []
+      }
+    }
+  }
 }
 ```
 
@@ -2477,7 +2573,24 @@ response = LoopsSdk::Workflows.delete_node(
   "nodeIds": ["clt0u3v5w0232sy31kqvbzs34"],
   "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
   "queuedContactCount": 0,
-  "queuedContactLimitReached": false
+  "workflow": {
+    "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+    "status": "Draft",
+    "name": "Welcome series",
+    "mailingListId": null,
+    "rootNodeId": "cln8p0q2r4s6t8u0v2w4x6z8",
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+    "nodes": {
+      "cln8p0q2r4s6t8u0v2w4x6z8": {
+        "typeName": "BlankTrigger",
+        "nextNodeIds": ["cln1a3b5c7d9e1f3g5h7i9j1"]
+      },
+      "cln1a3b5c7d9e1f3g5h7i9j1": {
+        "typeName": "ExitAction",
+        "nextNodeIds": []
+      }
+    }
+  }
 }
 ```
 
@@ -2541,6 +2654,65 @@ response = LoopsSdk::Workflows.add_branch(
 
 ---
 
+### Workflows.reroute_node()
+
+Reroute a source node's outgoing connection to another valid target node. The source node must have exactly one outgoing connection. Branch and experiment branch nodes cannot be rerouted with this endpoint.
+
+[API Reference](https://loops.so/docs/api-reference/reroute-node-connection)
+
+#### Parameters
+
+| Name                   | Type   | Required | Notes                                      |
+| ---------------------- | ------ | -------- | ------------------------------------------ |
+| `workflow_id`          | string | Yes      |                                            |
+| `node_id`              | string | Yes      | The source node whose connection to move.  |
+| `expected_revision_id` | string | Yes      | Pass `nil` for older workflows.            |
+| `new_target_node_id`   | string | Yes      | The node that should receive the connection. |
+
+#### Example
+
+```ruby
+response = LoopsSdk::Workflows.reroute_node(
+  workflow_id: "cls9t2u4v0210rx20jpuary23",
+  node_id: "clt0u3v5w0232sy31kqvbzs34",
+  expected_revision_id: "rev_123",
+  new_target_node_id: "cln3c5d7e9f1g3h5i7j9k1l3"
+)
+```
+
+#### Response
+
+```json
+{
+  "id": "cln8p0q2r4s6t8u0v2w4x6z8",
+  "typeName": "SignupTrigger",
+  "nextNodeIds": ["cln3c5d7e9f1g3h5i7j9k1l3"],
+  "workflowRevisionId": "clx7a3b5c7d9e1f3g5h7i9j2",
+  "workflow": {
+    "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+    "workflowRevisionId": "clx7a3b5c7d9e1f3g5h7i9j2",
+    "status": "Draft",
+    "name": "Welcome series",
+    "mailingListId": "clm2k8j4h6g0f8d6s4a2b0z8",
+    "rootNodeId": "cln8p0q2r4s6t8u0v2w4x6z8",
+    "nodes": {
+      "cln8p0q2r4s6t8u0v2w4x6z8": {
+        "typeName": "SignupTrigger",
+        "nextNodeIds": ["cln3c5d7e9f1g3h5i7j9k1l3"]
+      },
+      "cln3c5d7e9f1g3h5i7j9k1l3": {
+        "typeName": "SendEmailAction",
+        "nextNodeIds": [],
+        "emailMessageId": "cle5f7g9h1i3j5k7l9m1n3p5",
+        "subject": "Welcome to Acme!"
+      }
+    }
+  }
+}
+```
+
+---
+
 ### Workflows.delete_node_recursive()
 
 Delete a node and its downstream subtree.
@@ -2579,7 +2751,24 @@ response = LoopsSdk::Workflows.delete_node_recursive(
   ],
   "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
   "queuedContactCount": 0,
-  "queuedContactLimitReached": false
+  "workflow": {
+    "id": "clw1a3b5c7d9e1f3g5h7i9j1",
+    "status": "Draft",
+    "name": "Welcome series",
+    "mailingListId": null,
+    "rootNodeId": "cln8p0q2r4s6t8u0v2w4x6z8",
+    "workflowRevisionId": "clrev0w0r1k2f3l4o5w6",
+    "nodes": {
+      "cln8p0q2r4s6t8u0v2w4x6z8": {
+        "typeName": "BlankTrigger",
+        "nextNodeIds": ["cln1a3b5c7d9e1f3g5h7i9j1"]
+      },
+      "cln1a3b5c7d9e1f3g5h7i9j1": {
+        "typeName": "ExitAction",
+        "nextNodeIds": []
+      }
+    }
+  }
 }
 ```
 

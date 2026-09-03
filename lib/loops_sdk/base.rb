@@ -9,6 +9,8 @@ module LoopsSdk
         case response.status
         when 200, 201
           JSON.parse(response.body)
+        when 204
+          nil
         when 429
           limit = response.headers["x-ratelimit-limit"]
           remaining = response.headers["x-ratelimit-remaining"]

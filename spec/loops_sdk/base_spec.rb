@@ -125,6 +125,24 @@ RSpec.describe LoopsSdk::Base do
       expect(result).to eq({ "success" => true, "id" => "created" })
     end
 
+    it "treats a 204 response as success with no body" do
+      expect(connection).to receive(:send).with(:delete) do |&block|
+        req = double("req")
+        expect(req).to receive(:url).with(path)
+        expect(req).to receive(:headers=).with(default_headers)
+        expect(req).to receive(:params=).with({})
+        expect(req).to receive(:body=).with(nil)
+        block.call(req)
+        response
+      end
+
+      allow(response).to receive(:status).and_return(204)
+      allow(response).to receive(:body).and_return("")
+
+      result = described_class.make_request(method: :delete, path: path)
+      expect(result).to be_nil
+    end
+
     it "raises an error when the API returns an error" do
       expect(connection).to receive(:send).with(:get) do |&block|
         req = double("req")
@@ -195,4 +213,5 @@ RSpec.describe LoopsSdk::Base do
       end
     end
   end
-end 
+end
+ 
